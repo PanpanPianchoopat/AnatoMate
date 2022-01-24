@@ -1,6 +1,8 @@
 import Head from "next/head";
 import "antd/dist/antd.css";
+import NavButton from "../components/NavButton";
 import Container from "../components/Container";
+import Button from "../components/Button";
 
 export default function Home() {
   return (
@@ -12,8 +14,17 @@ export default function Home() {
       </Head>
 
       <main className="main">
+        <NavButton />
         <Container>
-          <h1>Welcome to AnatoMate</h1>
+          <div className="content">
+            <h1 className="header">AnatoMate</h1>
+            <h2 className="description">
+              &emsp;A web application for artist who want an improvement. We can
+              help suggest what you should focus to improve your human anatomy
+              drawing.
+            </h2>
+            <Button style={{ fontSize: "1.5em" }}>Try now</Button>
+          </div>
         </Container>
       </main>
     </div>
