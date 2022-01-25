@@ -1,0 +1,26 @@
+.main {
+  background-color: #FCF9F4; 
+  border: 25px solid #43065f;
+  width: 100%;
+  height: 100vh;
+  font-family: 'Montserrat';
+}
+
+.content {
+ display: flex;
+ flex-direction: column;
+ align-self: center;
+ width: 50%;
+ font-family: 'Montserrat';
+}
+
+.header {
+ font-size: 3em;
+ color: #43065f;
+ font-weight: bold;
+}
+
+.description {
+ text-align: justify;
+ padding-bottom: 30px;
+}

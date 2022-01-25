@@ -2,6 +2,8 @@ import Head from "next/head";
 import NavButton from "../components/NavButton";
 import Container from "../components/Container";
 import Button from "../components/Button";
+import styles from "../../styles/Home.module.css";
+import styled from "styled-components";
 
 export default function Home() {
   return (
@@ -12,12 +14,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="main">
+      <main className={styles.main}>
         <NavButton />
         <Container>
-          <div className="content">
-            <h1 className="header">AnatoMate</h1>
-            <h2 className="description">
+          <div className={styles.content}>
+            <h1 className={styles.header}>AnatoMate</h1>
+            <h2 className={styled.description}>
               &emsp;A web application for artist who want an improvement. We can
               help suggest what you should focus to improve your human anatomy
               drawing.
