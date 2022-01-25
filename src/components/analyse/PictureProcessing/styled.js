@@ -8,6 +8,7 @@ export const PictureContainer = styled.div`
   text-align: center;
   align-items: center;
   margin: 3px 0;
+  position: relative;
 `;
 export const UploadedImage = styled.img`
   width: 100%;
@@ -16,4 +17,5 @@ export const UploadedImage = styled.img`
   max-height: 500px;
   object-fit: cover;
   cursor: pointer;
+  position: absolute;
 `;

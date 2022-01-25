@@ -3,9 +3,6 @@ import Container from "../../components/Container";
 import FormContainer from "../../components/FormContainer";
 
 const Login = () => {
-  const onFinish = (values) => {
-    console.log(values);
-  };
   return (
     <Container>
       <FormContainer>
