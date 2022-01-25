@@ -18,7 +18,6 @@ export const StyledFormContainer = styled.div`
   border: 3px solid black;
   margin: -15px;
   overflow: hidden;
-  font-family: Montserrat;
 `;
 
 export const FormContent = styled.div`

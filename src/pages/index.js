@@ -3,7 +3,6 @@ import "antd/dist/antd.css";
 import NavButton from "../components/NavButton";
 import Container from "../components/Container";
 import Button from "../components/Button";
-import styles from "../styles/Home.module.css";
 
 export default function Home() {
   return (
@@ -14,17 +13,17 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <main className="main">
         <NavButton />
         <Container>
-          <div className={styles.content}>
-            <h1 className={styles.header}>AnatoMate</h1>
-            <h2 className={styles.description}>
+          <div className="content">
+            <h1 className="header">AnatoMate</h1>
+            <h2 className="description">
               &emsp;A web application for artist who want an improvement. We can
               help suggest what you should focus to improve your human anatomy
               drawing.
             </h2>
-            <Button>Try now</Button>
+            <Button style={{ fontSize: "1.5em" }}>Try now</Button>
           </div>
         </Container>
       </main>

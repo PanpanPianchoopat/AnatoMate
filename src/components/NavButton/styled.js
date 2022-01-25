@@ -9,7 +9,7 @@ export const ButtonGroup = styled.div`
   display: flex;
 `;
 
-export const StyledNavButton = styled.button.attrs((props) => {
+export const StyledNavButton = styled.div.attrs((props) => {
   const bgColor = props.type === "dark" ? COLORS.DARK_PURPLE : COLORS.SALMON;
   const textColor = props.type === "dark" ? "white" : COLORS.DARK_PURPLE;
   return { bgColor, textColor };
@@ -17,6 +17,9 @@ export const StyledNavButton = styled.button.attrs((props) => {
   border: 3px solid ${COLORS.DARK_PURPLE};
   width: 100px;
   height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1.2em;
   font-weight: bold;
   background: ${(props) => props.bgColor};
