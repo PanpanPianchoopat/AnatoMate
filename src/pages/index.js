@@ -1,5 +1,4 @@
 import Head from "next/head";
-import "antd/dist/antd.css";
 import NavButton from "../components/NavButton";
 import Container from "../components/Container";
 import Button from "../components/Button";
