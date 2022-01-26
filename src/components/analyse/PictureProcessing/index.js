@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
-import { Upload } from "antd";
+import React, { useState, useRef, useEffect } from "react";
+import { Upload, Switch } from "antd";
 import { PictureContainer, UploadedImage } from "./styled";
 
 import Pose from "../Pose";
+import Model from "../Model";
 
 const PictureProcessing = () => {
   const [picture, setPicture] = useState(null);
@@ -23,10 +24,20 @@ const PictureProcessing = () => {
     setPicture(null);
     setFinishUpload(false);
     setShowPoints(false);
+    setShowModel(false);
   };
 
-  const [showPoints, setShowPoints] = useState(false);
+  // const handleShowModel = (value) => {
+  //   setShowModel(value);
+  //   setShowPoints(false);
+  // };
 
+  const [showPoints, setShowPoints] = useState(false);
+  const [showModel, setShowModel] = useState(false);
+  const [modelKeypoints, setModelKeypoints] = useState(null);
+  useEffect(() => {
+    console.log("KEYPOINTS", modelKeypoints);
+  }, [modelKeypoints]);
   return (
     <>
       <PictureContainer>
@@ -51,9 +62,20 @@ const PictureProcessing = () => {
             onClick={handleNewUpload}
           />
         )}
-        {showPoints && <Pose finishProcess={finishUpload} />}
+        {showPoints && (
+          <Pose
+            finishProcess={finishUpload}
+            setModelKeypoints={setModelKeypoints}
+          />
+        )}
+        {showModel && <Model keypoints={modelKeypoints} />}
       </PictureContainer>
       <button onClick={handleNewUpload}>Reset Image</button>
+      {/* <Switch
+        checked={showModel}
+        onChange={(value) => handleShowModel(value)}
+      /> */}
+      <Switch checked={showModel} onChange={(value) => setShowModel(value)} />
     </>
   );
 };
