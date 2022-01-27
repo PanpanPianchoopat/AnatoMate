@@ -1,10 +1,7 @@
 import React from "react";
 import GridBg from "../../components/GridBg";
 import FormContainer from "../../components/FormContainer";
-import { Form, Input } from "antd";
-import Button from "../../components/Button";
-import { StyledInput } from "./styled";
-import Form1 from "../../components/signup/Form1";
+import Form1 from "./components/Form1";
 
 const Register = () => {
   return (

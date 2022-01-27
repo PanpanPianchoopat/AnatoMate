@@ -22,6 +22,7 @@ export const StyledFormContainer = styled.div`
   margin: -15px;
   overflow: hidden;
   padding: 10px;
+  justify-content: center;
 `;
 
 export const FormContent = styled.div`
