@@ -1,10 +1,10 @@
 import React from "react";
-import Container from "../../components/Container";
 import FormContainer from "../../components/FormContainer";
+import GridBg from "../../components/GridBg";
 
 const Login = () => {
   return (
-    <Container>
+    <GridBg>
       <FormContainer>
         <b>Login to your acccount</b>
         <small>
@@ -12,7 +12,7 @@ const Login = () => {
         </small>
         <small style={{ alignSelf: "flex-end" }}>Forget Password?</small>
       </FormContainer>
-    </Container>
+    </GridBg>
   );
 };
 
