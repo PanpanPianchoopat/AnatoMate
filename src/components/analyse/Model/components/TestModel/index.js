@@ -130,13 +130,15 @@ export default function TestModel(props) {
       // negative is down       negative is up
 
       // elbow is below shoulder
-      if (shoulder.y < elbow.y)
-        upperAngle = - getUpperArmAngle(shoulder, elbow);
+      // if (shoulder.y < elbow.y)
+      //   upperAngle = - getUpperArmAngle(shoulder, elbow);
 
       // elbow is above shoulder
-      if (shoulder.y > elbow.y )
-        upperAngle = getUpperArmAngle(shoulder, elbow);
-      
+      // if (shoulder.y > elbow.y )
+      //   upperAngle = - getUpperArmAngle(shoulder, elbow);
+        
+      upperAngle = - getUpperArmAngle(shoulder, elbow);
+
       if ( side == -1 ) 
         upperAngle = upperAngle + Math.PI; // right side need to adjust a little radian (plus one round)
       
@@ -192,23 +194,6 @@ export default function TestModel(props) {
   console.log("BONES", nodes.Ch36.skeleton.bones);
 
   if (keypoints) {
-    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y =
-    //   getAngle(
-    //     keypoints[POINT_NAMES.L_SHOULDER],
-    //     keypoints[POINT_NAMES.L_ELBOW],
-    //     0,
-    //     0,
-    //     -1
-    //   ) + 2.5;
-
-    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y =
-    //   getShoulderAngle(
-    //     keypoints[POINT_NAMES.L_ELBOW],
-    //     keypoints[POINT_NAMES.L_HIP],
-    //     keypoints[POINT_NAMES.L_SHOULDER]
-    //   ) *
-    //     0 -
-    //   0.5;
 
     // nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y = getAnotherAngle(keypoints[POINT_NAMES.L_SHOULDER], keypoints[POINT_NAMES.L_ELBOW]);
 
