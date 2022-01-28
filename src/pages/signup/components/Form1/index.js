@@ -5,15 +5,26 @@ import Form2 from "../Form2";
 import { useRouter } from "next/router";
 import userAPI from "../../../api/userAPI";
 
+const validateDistinctMail = (rule, value, callback) => {
+  userAPI.findExact("email", value).then((res) => {
+    if (value != "" && res.data.length > 0) {
+      callback("This email has already been taken");
+    } else {
+      callback();
+    }
+  });
+};
+
+function getTwoDigit(num) {
+  return ("0" + num).slice(-2);
+}
+
 const Form1 = () => {
   const [showNext, setShowNext] = useState(false);
-  const [info, setInfo] = useState(null);
-  const [emailFeedback, setEmailFeedback] = useState(null);
-  const [validPass, setValidPass] = useState("error");
+
   const [form1Info, setForm1Info] = useState(null);
   const [form2Info, setForm2Info] = useState(null);
 
-  const [completeForm, setCompleteForm] = useState(null);
   const router = useRouter();
   const handleSubmit = (value) => {
     if (!showNext) {
@@ -21,38 +32,34 @@ const Form1 = () => {
       setShowNext(true);
     } else {
       setForm2Info(value);
-      // router.push("/"); // back to home after save info to database
     }
   };
 
   useEffect(() => {
     if (form2Info) {
-      setCompleteForm({
+      const userInfo = {
         email: form1Info.email,
         username: form2Info.username,
         firstname: form2Info.fName,
         lastname: form2Info.lName,
-        pf_image: null,
+        pf_image: "",
         password: form1Info.password,
-        dob: `${form2Info.day}/${form2Info.month}/${form2Info.year}`,
+        dob: `${getTwoDigit(form2Info.day)}/${getTwoDigit(form2Info.month)}/${
+          form2Info.year
+        }`,
         sex: form2Info.gender ? form2Info.gender : null,
-      });
+      };
+      userAPI
+        .signup(userInfo)
+        .then((res) => {
+          if (res) {
+            console.log(res.data);
+            router.push("/");
+          }
+        })
+        .catch((e) => console.log(e));
     }
   }, [form2Info]);
-
-  useEffect(() => {
-    console.log("COMPLETE", completeForm);
-  }, [completeForm]);
-
-  const validateDistinctMail = (rule, value, callback) => {
-    userAPI.findExact("email", value).then((res) => {
-      if (value != "" && res.data.length > 0) {
-        callback("This email has already been taken");
-      } else {
-        callback();
-      }
-    });
-  };
 
   return (
     <Form onFinish={handleSubmit} size="large">

@@ -1,16 +1,7 @@
 import { HTTP } from "./axios";
 
 class UserAPI {
-  findUser(type, keyword) {
-    console.log("TYPE", type);
-    console.log("REQ", `/userlist?${type}=${keyword}`);
-    // return HTTP.get(`/userlist?${type}=${keyword}`);
-    if (type === "username") {
-      console.log("USER");
-      return HTTP.get("/userlist", { params: { username: keyword } });
-    }
-  }
-  signin(info) {
+  signup(info) {
     return HTTP.post("/register", info);
   }
   login(info) {

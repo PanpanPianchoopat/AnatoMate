@@ -1,14 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Radio, Select, Checkbox } from "antd";
 import Button from "../../../../components/Button";
-import { MINIMUM_AGE, GENDER_OPTIONS, MONTH_OPTIONS } from "./constants";
+import {
+  MINIMUM_AGE,
+  GENDER_OPTIONS,
+  MONTH_OPTIONS,
+  DAY_OF_MONTHS,
+} from "./constants";
 import userAPI from "../../../api/userAPI";
 
 function requiredField(fieldName) {
   return { required: true, message: `Please input your ${fieldName}` };
 }
 
+const validateDuplicateName = (rule, value, callback) => {
+  const containSpecialChar = /[!-\/:-@[-`{-~]/.test(value);
+  if (containSpecialChar) {
+    callback("User name cannot contain special characters");
+  }
+  userAPI.findExact("username", value).then((res) => {
+    if (value != "" && res.data.length > 0) {
+      callback("This username has already been taken");
+    } else {
+      callback();
+    }
+  });
+};
+
+function isLeapYear(year) {
+  if (year % 4 == 0) {
+    if (year % 100 != 0) {
+      return true;
+    } else if (year % 100 == 0 && year % 400 == 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
 const Form2 = () => {
+  const [form2] = Form.useForm();
   const currentYear = new Date().getFullYear() + 1;
   const hundredYearAgo = new Date().getFullYear() - 100;
   // Get year options according to current year and min-max age range
@@ -17,18 +48,24 @@ const Form2 = () => {
     .sort()
     .reverse();
 
-  const validateDuplicateName = (rule, value, callback) => {
-    const containSpecialChar = /[!-\/:-@[-`{-~]/.test(value);
-    if (containSpecialChar) {
-      callback("User name cannot contain special characters");
+  const [day, setDay] = useState(0);
+  const [month, setMonth] = useState(0);
+  const validateDate = (rule, year, callback) => {
+    if (year == undefined) {
+      callback("Please input your birth year");
     }
-    userAPI.findExact("username", value).then((res) => {
-      if (value != "" && res.data.length > 0) {
-        callback("This username has already been taken");
-      } else {
-        callback();
+    if (month == 1 || month > 2) {
+      if (DAY_OF_MONTHS[month - 1] < day) {
+        callback("This is not a valid date");
       }
-    });
+    } else if (month == 2) {
+      if (day > 29) {
+        callback("This is not a valid date");
+      } else if (day == 29 && !isLeapYear(year)) {
+        callback(`${year} is not a leap year`);
+      }
+    }
+    callback();
   };
 
   return (
@@ -40,6 +77,7 @@ const Form2 = () => {
           { validator: validateDuplicateName },
         ]}
         hasFeedback
+        form={form2}
       >
         <Input placeholder="Username" style={{ border: "2px solid black" }} />
       </Form.Item>
@@ -95,6 +133,7 @@ const Form2 = () => {
         >
           <Select
             placeholder="Day"
+            onChange={(day) => setDay(day)}
             style={{
               border: "2px solid black",
               display: "inline-block",
@@ -102,7 +141,7 @@ const Form2 = () => {
             }}
           >
             {Array.from(Array(31).keys()).map((date) => (
-              <Select.Option value={(date + 1).toString()} key={date}>
+              <Select.Option value={date + 1} key={date}>
                 {date + 1}
               </Select.Option>
             ))}
@@ -116,6 +155,7 @@ const Form2 = () => {
         >
           <Select
             placeholder="Month"
+            onChange={(month) => setMonth(month)}
             style={{
               border: "2px solid black",
               display: "inline-block",
@@ -133,7 +173,7 @@ const Form2 = () => {
         <Form.Item
           name="year"
           noStyle
-          rules={[requiredField("birth year")]}
+          rules={[{ validator: validateDate }]}
           hasFeedback
         >
           <Select
@@ -146,7 +186,7 @@ const Form2 = () => {
             }}
           >
             {YEAR_OPTIONS.map((year) => (
-              <Select.Option value={year.toString()} key={year}>
+              <Select.Option value={year} key={year}>
                 {year}
               </Select.Option>
             ))}
