@@ -56,51 +56,181 @@ export default function TestModel(props) {
     return c2 * m;
   };
 
-  const getShoulderAngle = (p1, p2, fixedPoint) => {
-    const angle1 = Math.atan2(p1.y - fixedPoint.y, p1.x - fixedPoint.x);
-    const angle2 = Math.atan2(p2.y - fixedPoint.y, p2.x - fixedPoint.x);
-    console.log("NEW FOR", angle1 - angle2);
-    return angle1 - angle2;
+  // const getLowerArmAngle = (p1, p2, fixedPoint) => {
+  //   const angle1 = Math.atan2(p1.y - fixedPoint.y, p1.x - fixedPoint.x);
+  //   const angle2 = Math.atan2(p2.y - fixedPoint.y, p2.x - fixedPoint.x);
+  //   console.log("NEW FOR", angle1 - angle2);
+  //   return angle1 - angle2;
+  // };
+
+  const getLowerArmAngle = (p1, p2, p3) => {
+    const numarator = p2.y * (p1.x - p3.x) + p1.y * (p3.x - p2.x) + p3.y * (p2.x - p1.x);
+    const denominator = (p2.x - p1.x) * (p1.x - p3.x) + (p2.y - p1.y) * (p1.y - p3.y);
+    return Math.atan2(numarator, denominator);
   };
+
+  // get Angle(in radian) that refer to Horizontal Axis 
+  const getUpperArmAngle = (p1, p2) => {
+    const angle = Math.atan2((p2.y - p1.y), (p2.x - p1.x));
+    console.log(p2.name);
+    console.log(p1.name);
+    console.log("AROI", angle);
+    return angle;
+  };
+
+  // side =  1 is left side of the model (right of us)
+  //      = -1 is right side of the model (left of us)
+  const rotateArm = (side) => {
+
+    var indexShoulder, indexElbow, indexWrist = 0;
+    var shoulderBoneIndex, elbowBoneIndex, wristBoneIndex = 0;
+
+    if (side == 1) // left of model
+    {
+      // keypoints index
+      indexShoulder = POINT_NAMES.L_SHOULDER;
+      indexElbow = POINT_NAMES.L_ELBOW;
+      indexWrist = POINT_NAMES.L_WRIST;
+      // bones index
+      shoulderBoneIndex = BONE_NAMES.L_SHOULDER;
+      elbowBoneIndex = BONE_NAMES.L_ARM;
+      wristBoneIndex = BONE_NAMES.L_FOREARM;
+    } 
+
+    if (side == -1) // right of model
+    {
+      // keypoints index
+      indexShoulder = POINT_NAMES.R_SHOULDER;
+      indexElbow = POINT_NAMES.R_ELBOW;
+      indexWrist = POINT_NAMES.R_WRIST;
+      // bones index
+      shoulderBoneIndex = BONE_NAMES.R_SHOULDER;
+      elbowBoneIndex = BONE_NAMES.R_ARM;
+      wristBoneIndex = BONE_NAMES.R_FOREARM;
+    }
+    
+    // get keypoints
+    const shoulder = keypoints[indexShoulder];
+    const elbow = keypoints[indexElbow];
+    const waist = keypoints[indexWrist];
+
+    // get bones
+    const shoulderBone = nodes.Ch36.skeleton.bones[shoulderBoneIndex];
+    const armBone = nodes.Ch36.skeleton.bones[elbowBoneIndex];
+    const forearmBone = nodes.Ch36.skeleton.bones[wristBoneIndex];
+
+    const shoulderRad = {max: 0.4, min: -0.4};
+    var upperAngle = 0;
+
+    if(shoulder.confident > CONFIDENCE && elbow.confident > CONFIDENCE)
+    {
+      // =========================== UPPER ARM ===========================
+      // SHOULDER LEFT          SHOULDER RIGHT
+      // positive is up         positive is down
+      // negative is down       negative is up
+
+      // elbow is below shoulder
+      // if (shoulder.y < elbow.y)
+      //   upperAngle = - getUpperArmAngle(shoulder, elbow);
+
+      // elbow is above shoulder
+      // if (shoulder.y > elbow.y )
+      //   upperAngle = - getUpperArmAngle(shoulder, elbow);
+        
+      upperAngle = - getUpperArmAngle(shoulder, elbow);
+
+      if ( side == -1 ) 
+        upperAngle = upperAngle + Math.PI; // right side need to adjust a little radian (plus one round)
+      
+      // If shoulder is in the range of movement we move only shoulder
+      if (upperAngle <= shoulderRad.max && upperAngle >= shoulderRad.min)
+        shoulderBone.rotation.y = upperAngle;
+      else // If shoulder is out of the range of movement we move shoulder to the max then the rest move arm
+      {
+        // ARM rotate up and down by using x axis (LEFT and RIGHT is the same)
+        // negative is up
+        // positive is down
+        var radForArm = 0 // radian for arm
+        if (upperAngle > shoulderRad.max)
+        {
+          radForArm = - (upperAngle - shoulderRad.max) * side;
+          shoulderBone.rotation.y = shoulderRad.max;
+        }
+
+        if (upperAngle < shoulderRad.min)
+        {
+          radForArm = - (upperAngle - shoulderRad.min) * side;
+          shoulderBone.rotation.y = shoulderRad.min;
+        }
+        // fore arm (move into body (left arm) : negative radian | move out body (left arm) : positive radian)
+        armBone.rotation.x = radForArm;
+      }
+
+      // =========================== LOWER ARM ===========================
+      // find angle btw 3 points
+      // Ref: https://riptutorial.com/math/example/25158/calculate-angle-from-three-points
+
+      // create new refference point
+      const xDiff = shoulder.x - elbow.x;
+      const yDiff = shoulder.y - elbow.y;
+
+      const newRefPoint = {x: elbow.x + xDiff, y: elbow.y + yDiff};
+
+      const lowerAngle = getLowerArmAngle(elbow, newRefPoint, waist);
+      // FOREARM
+      // left arm
+      // move into body : negative radian 
+      // move out body : positive radian
+
+      // right arm
+      // move into body : positive radian 
+      // move out body : negative radian
+      forearmBone.rotation.x = -lowerAngle * side;
+    }
+    
+  }
 
   //keypoints: [name, x, y, confidence]
   console.log("BONES", nodes.Ch36.skeleton.bones);
 
   if (keypoints) {
-    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y =
+
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y = getAnotherAngle(keypoints[POINT_NAMES.L_SHOULDER], keypoints[POINT_NAMES.L_ELBOW]);
+
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y = getAnotherAngle(keypoints[POINT_NAMES.L_SHOULDER], keypoints[POINT_NAMES.L_ELBOW]);
+
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.y = getAnotherAngle(keypoints[POINT_NAMES.L_SHOULDER], keypoints[POINT_NAMES.L_ELBOW]);
+    rotateArm(1); // left
+    rotateArm(-1); // right
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y = 0.4
+    ///nodes.Ch36.skeleton.bones[BONE_NAMES.R_SHOULDER].rotation.y = 0.4
+
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.x = 1
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.y = 0
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.z = 0
+
+    //nodes.Ch36.skeleton.bones[BONE_NAMES.R_ARM].rotation.x = 1
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.R_ARM].rotation.y = 0
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.R_ARM].rotation.z = 0
+
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.R_FOREARM].rotation.x = -1
+
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.x =
     //   getAngle(
     //     keypoints[POINT_NAMES.L_SHOULDER],
     //     keypoints[POINT_NAMES.L_ELBOW],
     //     0,
     //     0,
-    //     -1
-    //   ) + 2.5;
+    //     1
+    //   ) - 2.5;
 
-    nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y =
-      getShoulderAngle(
-        keypoints[POINT_NAMES.L_ELBOW],
-        keypoints[POINT_NAMES.L_HIP],
-        keypoints[POINT_NAMES.L_SHOULDER]
-      ) *
-        0 -
-      0.5;
-
-    nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.x =
-      getAngle(
-        keypoints[POINT_NAMES.L_SHOULDER],
-        keypoints[POINT_NAMES.L_ELBOW],
-        0,
-        0,
-        1
-      ) - 2.5;
-
-    nodes.Ch36.skeleton.bones[BONE_NAMES.L_FOREARM].rotation.x = getAngle(
-      keypoints[POINT_NAMES.L_ELBOW],
-      keypoints[POINT_NAMES.L_WRIST],
-      0,
-      0,
-      1
-    );
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.L_FOREARM].rotation.x = getAngle(
+    //   keypoints[POINT_NAMES.L_ELBOW],
+    //   keypoints[POINT_NAMES.L_WRIST],
+    //   0,
+    //   0,
+    //   1
+    // );
   }
 
   useEffect(() => {
