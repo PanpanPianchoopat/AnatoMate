@@ -7,4 +7,5 @@ export const StyledContainer = styled.div`
   max-width: 1024px;
   height: 100vh;
   margin: 0 auto;
+  background: none;
 `;

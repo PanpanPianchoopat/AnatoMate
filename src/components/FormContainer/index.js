@@ -10,7 +10,7 @@ const FormContainer = ({ children }) => {
   return (
     <LayerContainer>
       <StyledFormContainer>
-        <FormHeader>Anatomate</FormHeader>
+        <FormHeader>AnatoMate</FormHeader>
         <FormContent>{children}</FormContent>
       </StyledFormContainer>
     </LayerContainer>
