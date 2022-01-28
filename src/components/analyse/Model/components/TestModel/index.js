@@ -78,13 +78,46 @@ export default function TestModel(props) {
     return angle;
   };
 
-  // side = -1 is left side of the model (right of us)
-  //      =  1 is right side of the model (left of us)
+  // side =  1 is left side of the model (right of us)
+  //      = -1 is right side of the model (left of us)
   const rotateArm = (side) => {
+
+    var indexShoulder, indexElbow, indexWrist = 0;
+    var shoulderBoneIndex, elbowBoneIndex, wristBoneIndex = 0;
+
+    if (side == 1) // left of model
+    {
+      // keypoints index
+      indexShoulder = POINT_NAMES.L_SHOULDER;
+      indexElbow = POINT_NAMES.L_ELBOW;
+      indexWrist = POINT_NAMES.L_WRIST;
+      // bones index
+      shoulderBoneIndex = BONE_NAMES.L_SHOULDER;
+      elbowBoneIndex = BONE_NAMES.L_ARM;
+      wristBoneIndex = BONE_NAMES.L_FOREARM;
+    } 
+
+    if (side == -1) // right of model
+    {
+      // keypoints index
+      indexShoulder = POINT_NAMES.R_SHOULDER;
+      indexElbow = POINT_NAMES.R_ELBOW;
+      indexWrist = POINT_NAMES.R_WRIST;
+      // bones index
+      shoulderBoneIndex = BONE_NAMES.R_SHOULDER;
+      elbowBoneIndex = BONE_NAMES.R_ARM;
+      wristBoneIndex = BONE_NAMES.R_FOREARM;
+    }
+    
     // get keypoints
-    const shoulder = keypoints[POINT_NAMES.L_SHOULDER];
-    const elbow = keypoints[POINT_NAMES.L_ELBOW];
-    const waist = keypoints[POINT_NAMES.L_WRIST];
+    const shoulder = keypoints[indexShoulder];
+    const elbow = keypoints[indexElbow];
+    const waist = keypoints[indexWrist];
+
+    // get bones
+    const shoulderBone = nodes.Ch36.skeleton.bones[shoulderBoneIndex];
+    const armBone = nodes.Ch36.skeleton.bones[elbowBoneIndex];
+    const forearmBone = nodes.Ch36.skeleton.bones[wristBoneIndex];
 
     const shoulderRad = {max: 0.4, min: -0.4};
     var upperAngle = 0;
@@ -92,9 +125,9 @@ export default function TestModel(props) {
     if(shoulder.confident > CONFIDENCE && elbow.confident > CONFIDENCE)
     {
       // =========================== UPPER ARM ===========================
-      // SHOULDER
-      // positive is up
-      // negative is down
+      // SHOULDER LEFT          SHOULDER RIGHT
+      // positive is up         positive is down
+      // negative is down       negative is up
 
       // elbow is below shoulder
       if (shoulder.y < elbow.y)
@@ -104,28 +137,31 @@ export default function TestModel(props) {
       if (shoulder.y > elbow.y )
         upperAngle = getUpperArmAngle(shoulder, elbow);
       
+      if ( side == -1 ) 
+        upperAngle = upperAngle + Math.PI; // right side need to adjust a little radian (plus one round)
+      
       // If shoulder is in the range of movement we move only shoulder
       if (upperAngle <= shoulderRad.max && upperAngle >= shoulderRad.min)
-        nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y = upperAngle;
+        shoulderBone.rotation.y = upperAngle;
       else // If shoulder is out of the range of movement we move shoulder to the max then the rest move arm
       {
-        // ARM rotate up and down by using x axis
+        // ARM rotate up and down by using x axis (LEFT and RIGHT is the same)
         // negative is up
         // positive is down
         var radForArm = 0 // radian for arm
         if (upperAngle > shoulderRad.max)
         {
-          radForArm = - (upperAngle - shoulderRad.max);
-          nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y = shoulderRad.max;
+          radForArm = - (upperAngle - shoulderRad.max) * side;
+          shoulderBone.rotation.y = shoulderRad.max;
         }
 
         if (upperAngle < shoulderRad.min)
         {
-          radForArm = - (upperAngle - shoulderRad.min);
-          nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y = shoulderRad.min;
+          radForArm = - (upperAngle - shoulderRad.min) * side;
+          shoulderBone.rotation.y = shoulderRad.min;
         }
         // fore arm (move into body (left arm) : negative radian | move out body (left arm) : positive radian)
-        nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.x = radForArm;
+        armBone.rotation.x = radForArm;
       }
 
       // =========================== LOWER ARM ===========================
@@ -139,8 +175,15 @@ export default function TestModel(props) {
       const newRefPoint = {x: elbow.x + xDiff, y: elbow.y + yDiff};
 
       const lowerAngle = getLowerArmAngle(elbow, newRefPoint, waist);
-      // fore arm (move into body (left arm) : negative radian | move out body (left arm) : positive radian)
-      nodes.Ch36.skeleton.bones[BONE_NAMES.L_FOREARM].rotation.x = -lowerAngle;
+      // FOREARM
+      // left arm
+      // move into body : negative radian 
+      // move out body : positive radian
+
+      // right arm
+      // move into body : positive radian 
+      // move out body : negative radian
+      forearmBone.rotation.x = -lowerAngle * side;
     }
     
   }
@@ -172,12 +215,20 @@ export default function TestModel(props) {
     // nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y = getAnotherAngle(keypoints[POINT_NAMES.L_SHOULDER], keypoints[POINT_NAMES.L_ELBOW]);
 
     // nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.y = getAnotherAngle(keypoints[POINT_NAMES.L_SHOULDER], keypoints[POINT_NAMES.L_ELBOW]);
-    rotateArm(1);
+    rotateArm(1); // left
+    rotateArm(-1); // right
     // nodes.Ch36.skeleton.bones[BONE_NAMES.L_SHOULDER].rotation.y = 0.4
+    ///nodes.Ch36.skeleton.bones[BONE_NAMES.R_SHOULDER].rotation.y = 0.4
 
     // nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.x = 1
     // nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.y = 0
     // nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.z = 0
+
+    //nodes.Ch36.skeleton.bones[BONE_NAMES.R_ARM].rotation.x = 1
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.R_ARM].rotation.y = 0
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.R_ARM].rotation.z = 0
+
+    // nodes.Ch36.skeleton.bones[BONE_NAMES.R_FOREARM].rotation.x = -1
 
     // nodes.Ch36.skeleton.bones[BONE_NAMES.L_ARM].rotation.x =
     //   getAngle(
