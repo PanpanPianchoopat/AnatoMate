@@ -1,21 +1,33 @@
 import React, { useState, useRef } from "react";
-import Container from "../../components/Container";
-import { SectionsContainer } from "./styled";
+import { PageContainer, SectionsContainer, Header } from "./styled";
 import PictureProcessing from "../../components/Analyse/PictureProcessing";
+import HowTo from "./components/HowTo";
+import Suggestions from "./components/Suggestions";
+import NavButton from "../../components/NavButton";
 
 const Analyse = () => {
-  const imgRef = useRef();
   return (
-    <Container>
-      <h1>AnatoMate</h1>
+    <PageContainer>
+      <Header>AnatoMate</Header>
       <SectionsContainer>
-        <div>Howto</div>
+        <HowTo />
 
-        <PictureProcessing />
+        <div
+          style={{
+            width: "500px",
+            height: "500px",
+            border: "3px solid black",
+            background: "white",
+          }}
+        >
+          image section mock
+        </div>
 
-        <div>comments</div>
+        {/* <PictureProcessing /> */}
+
+        <Suggestions />
       </SectionsContainer>
-    </Container>
+    </PageContainer>
   );
 };
 
