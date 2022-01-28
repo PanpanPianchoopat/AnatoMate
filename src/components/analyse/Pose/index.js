@@ -50,6 +50,16 @@ const Pose = ({ ...props }) => {
       setFirstRender(false);
     } else {
       setShowPoints(true);
+      const newKeypoints = [];
+      for (const [name, position] of Object.entries(pose.joints)) {
+        newKeypoints.push({
+          name: name,
+          x: position[0],
+          y: position[1],
+          confident: 0.5,
+        });
+      }
+      props.setModelKeypoints(newKeypoints);
     }
   }, [pose]);
 
