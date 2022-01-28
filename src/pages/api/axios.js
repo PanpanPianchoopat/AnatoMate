@@ -6,3 +6,5 @@ export const HTTP = axios.create({
     "Content-type": "application/json",
   },
 });
+
+export default HTTP;

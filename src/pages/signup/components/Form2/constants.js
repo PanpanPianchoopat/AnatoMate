@@ -4,6 +4,7 @@ export const GENDER_OPTIONS = [
   { label: "Male", value: "M" },
   { label: "Female", value: "F" },
   { label: "Others", value: "O" },
+  { label: "Prefer not to say", value: "P" },
 ];
 
 export const MONTH_OPTIONS = [

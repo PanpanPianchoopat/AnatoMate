@@ -116,11 +116,7 @@ const Form2 = () => {
         </Form.Item>
       </Form.Item>
 
-      <Form.Item
-        name="gender"
-        label="Gender (optional)"
-        style={{ marginBottom: "10px" }}
-      >
+      <Form.Item name="gender" label="Gender" style={{ marginBottom: "10px" }}>
         <Radio.Group options={GENDER_OPTIONS} />
       </Form.Item>
 

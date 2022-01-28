@@ -47,7 +47,7 @@ const Form1 = () => {
         dob: `${getTwoDigit(form2Info.day)}/${getTwoDigit(form2Info.month)}/${
           form2Info.year
         }`,
-        sex: form2Info.gender ? form2Info.gender : null,
+        sex: form2Info.gender ? form2Info.gender : "",
       };
       userAPI
         .signup(userInfo)
