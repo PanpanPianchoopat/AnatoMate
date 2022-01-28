@@ -26,6 +26,9 @@ export default function Home() {
             </h2>
             <Button style={{ fontSize: "1.5em" }}>Try now</Button>
           </div>
+          <div className={styles.model}>
+            <img src="https://www.nicepng.com/png/full/938-9383870_skeletal-muscle-human-body-skeleton-transprent-png-muscular.png" />
+          </div>
         </Container>
       </main>
     </div>

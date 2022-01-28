@@ -3,10 +3,13 @@ import styled from "styled-components";
 export const LayerContainer = styled.div`
   background: #febbab;
   width: 45%;
+  max-width: 500px;
+  min-width: 350px;
   height: 60vh;
   margin: auto;
   border: 3px solid black;
   overflow: visible;
+  font-family: Montserrat;
 `;
 
 export const StyledFormContainer = styled.div`
@@ -18,6 +21,8 @@ export const StyledFormContainer = styled.div`
   border: 3px solid black;
   margin: -15px;
   overflow: hidden;
+  padding: 10px;
+  justify-content: center;
 `;
 
 export const FormContent = styled.div`
@@ -26,10 +31,12 @@ export const FormContent = styled.div`
   flex-direction: column;
   margin: 0 5%;
   font-size: 1em;
+  overflow-y: auto;
 `;
 
 export const FormHeader = styled.h1`
   align-self: center;
+  font-weight: bold;
 `;
 
 export default StyledFormContainer;
