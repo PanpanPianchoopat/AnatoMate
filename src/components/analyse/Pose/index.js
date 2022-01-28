@@ -13,12 +13,13 @@ async function PostEstimation(image) {
   return await detector.estimatePoses(image);
 }
 
-function FindKeypoints(image, setPose, pose, updatedJoints) {
+function FindKeypoints(image, setPose, pose, updatedJoints, setModelKeypoints) {
   let keypoints = [];
   let score;
   let poseEs = {};
 
   PostEstimation(image).then((e) => {
+    console.log("POSENET", e);
     score = e[0].score;
     e[0].keypoints.forEach((p) => {
       const x = p.x;
@@ -33,6 +34,7 @@ function FindKeypoints(image, setPose, pose, updatedJoints) {
         poseEs[NAMINGS[p.name]] = [x, y];
       }
     });
+    setModelKeypoints(keypoints);
     pose.joints = poseEs;
     setPose(Object.assign({}, pose, { edges: updatedJoints }));
   });
@@ -77,14 +79,14 @@ const Pose = ({ ...props }) => {
   useEffect(() => {
     if (props.finishProcess) {
       const img = document.getElementById("picture");
-      FindKeypoints(img, setPose, pose, updatedJoints);
+      FindKeypoints(img, setPose, pose, updatedJoints, props.setModelKeypoints);
     }
   }, [props.finishProcess]);
 
   const xStep = 500;
   const yStep = 500;
 
-  const mapX = (unit) => unit; //for what ใส่ค่าได้เลยปะแบบนี้
+  const mapX = (unit) => unit;
   const mapY = (unit) => unit;
 
   const unmapX = (coord) => coord;
