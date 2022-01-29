@@ -208,7 +208,7 @@ const rotateArm = (side, keypoints, nodes) => {
     const diff_percent = diff / good_length;
 
 
-    if (diff_percent > 0.03 && diff_percent <= 0.1)
+    if (diff_percent > 0.05 && diff_percent <= 0.1)
       cri_level = "low";
     else if (diff_percent > 0.1 && diff_percent <= 0.3)
       cri_level = "medium";
@@ -224,9 +224,8 @@ const rotateArm = (side, keypoints, nodes) => {
   // length -> pixel
   // head_ratio -> correct ratio that suppose to be for this part
   // side -> string
-  function getComment(part_name, length, head_ratio, side, keypoints)
+  function getComment(part_name, length, head_ratio, side, fullBody)
   {
-    const fullBody = getFullBodyLength(keypoints);
     const headSize = fullBody * 0.125; // in 8 proportion ration head size = 12.5% of full body
     const static_suffix = {long: "is longer than usual.", short: "is shorter than usual."};
     var thisSuffix = "";
@@ -256,6 +255,7 @@ const rotateArm = (side, keypoints, nodes) => {
 
   function detectComment(keypoints)
   {
+    const fullBody = getFullBodyLength(keypoints);
     var all_comment = [];
 
     const left_arm_length =  getArmLength(keypoints[POINT_NAMES.L_SHOULDER], keypoints[POINT_NAMES.L_ELBOW], keypoints[POINT_NAMES.L_WRIST]);
@@ -264,12 +264,24 @@ const rotateArm = (side, keypoints, nodes) => {
     const right_leg_length = getLeglength(keypoints[POINT_NAMES.R_HIP], keypoints[POINT_NAMES.R_KNEE], keypoints[POINT_NAMES.R_ANKLE]);
 
     // check arm
-    pushArray(all_comment, getComment("arm", left_arm_length.armlength, 2.5, "Left", keypoints));
-    pushArray(all_comment, getComment("arm", right_arm_length.armlength, 2.5, "Right", keypoints));
+    pushArray(all_comment, getComment("arm", left_arm_length.armlength, 2.5, "Left", fullBody));
+    pushArray(all_comment, getComment("arm", right_arm_length.armlength, 2.5, "Right", fullBody));
+
+    pushArray(all_comment, getComment("upper arm", left_arm_length.upperarmlength, 1.5, "Left", fullBody));
+    pushArray(all_comment, getComment("upper arm", right_arm_length.upperarmlength, 1.5, "Right", fullBody));
+
+    pushArray(all_comment, getComment("lower arm", left_arm_length.lowerarmlength, 1, "Left", fullBody));
+    pushArray(all_comment, getComment("lower arm", right_arm_length.lowerarmlength, 1, "Right", fullBody));
     
     // check leg
-    pushArray(all_comment, getComment("leg", left_leg_length.leglength, 3.5, "Left", keypoints));
-    pushArray(all_comment, getComment("leg", right_leg_length.leglength, 3.5, "Right", keypoints));
+    pushArray(all_comment, getComment("leg", left_leg_length.leglength, 3.5, "Left", fullBody));
+    pushArray(all_comment, getComment("leg", right_leg_length.leglength, 3.5, "Right", fullBody));
+
+    pushArray(all_comment, getComment("upper leg", left_leg_length.upperleglength, 1.8, "Left", fullBody));
+    pushArray(all_comment, getComment("upper leg", right_leg_length.upperleglength, 1.8, "Right", fullBody));
+
+    pushArray(all_comment, getComment("lower leg", left_leg_length.lowerleglength, 1.7, "Left", fullBody));
+    pushArray(all_comment, getComment("lower leg", right_leg_length.lowerleglength, 1.7, "Right", fullBody));
 
     return all_comment;
   }
@@ -284,7 +296,6 @@ export default function TestModel(props) {
   const [keypoints, setModelKeypoints] = useState(null);
   
   const [comment, setComment] = useState(null);
-  
 
   //keypoints: [name, x, y, confidence]
   console.log("BONES", nodes.Ch36.skeleton.bones);
@@ -306,21 +317,21 @@ export default function TestModel(props) {
     }
   }, [props.keypoints]);
 
-  // useEffect(() => {
-  //   console.log("COMMENT", comment);
-  // }, [comment]);
+  useEffect(() => {
+    console.log("COMMENT", comment);
+  }, [comment]);
 
   return (
     <group
       position={[
         keypoints ? findPosition(keypoints[0].x) : findPosition(250),
-        keypoints ? -findPosition(keypoints[0].y) : -findPosition(250),
+        keypoints ? -findPosition(keypoints[0].y) + 1 : -findPosition(250) + 1,
         0,
       ]}
     >
       <group ref={group} dispose={null} position={[0, -1.6, 0]}>
         <group name="Armature" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
-          <primitive object={nodes.mixamorig1Hips} />
+          <primitive object={nodes.mixamorig1Hips} position={[1, 0, 0]} />
           <skinnedMesh
             geometry={nodes.Ch36.geometry}
             // material={transparentMat}
