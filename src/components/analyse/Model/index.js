@@ -19,7 +19,7 @@ const Model = ({ ...props }) => {
         position: "absolute",
       }}
     >
-      <Canvas colorManagement camera={{ position: [0, -1, 8], fov: 30 }}>
+      <Canvas colorManagement camera={{ position: [0, 0, 3.5], fov: 30 }}>
         <ambientLight intensity={1} />
         <primitive object={new THREE.AxesHelper(10)} />
         <Suspense fallback={null}>

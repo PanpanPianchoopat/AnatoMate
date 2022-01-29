@@ -231,10 +231,6 @@ const rotateArm = (side, keypoints, nodes) => {
     const static_suffix = {long: "is longer than usual.", short: "is shorter than usual."};
     var thisSuffix = "";
 
-    // console.log("BODY", fullBody);
-    // console.log("HEAD", headSize);
-    // console.log("L", length);
-
     if (length < headSize * head_ratio)
       thisSuffix = static_suffix.short;
 
@@ -251,10 +247,6 @@ const rotateArm = (side, keypoints, nodes) => {
       }
 
     return this_comment;
-    // comment[part_name] = {
-    //       comment: `${side} ${part_name} ${thisSuffix}`,
-    //       critical_level: findCriLevel(length, headSize * head_ratio)
-    //   }
   }
 
   function pushArray (array, value)
@@ -288,17 +280,10 @@ export default function TestModel(props) {
   const group = useRef();
   const { nodes, materials, geometry, animations } = useGLTF("/testModel.glb");
   const { actions } = useAnimations(animations, group);
-  // const transparentMat = new THREE.MeshStandardMaterial({
-  //   color: "red",
-  //   transparent: true,
-  //   opacity: 0.5,
-  // });
+
   const [keypoints, setModelKeypoints] = useState(null);
   
   const [comment, setComment] = useState(null);
-  
-  // const comment = [];
-
   
 
   //keypoints: [name, x, y, confidence]
@@ -321,9 +306,9 @@ export default function TestModel(props) {
     }
   }, [props.keypoints]);
 
-  useEffect(() => {
-    console.log("COMMENT", comment);
-  }, [comment]);
+  // useEffect(() => {
+  //   console.log("COMMENT", comment);
+  // }, [comment]);
 
   return (
     <group
