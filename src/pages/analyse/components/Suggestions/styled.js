@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { AiOutlineSmile } from "react-icons/ai";
 
 export const SuggestionsWrapper = styled.div`
   width: calc(50% - 255px);
@@ -10,8 +11,16 @@ export const SuggestionsWrapper = styled.div`
 `;
 
 export const Comments = styled.div``;
+
 export const NoComment = styled.div`
   display: flex;
   align-self: center;
-  margin-top: 45%;
+  margin-top: 30px;
+  align-items: center;
+  font-size: 1em;
+`;
+
+export const Smiley = styled(AiOutlineSmile)`
+  font-size: 1.3em;
+  margin-left: 5px;
 `;

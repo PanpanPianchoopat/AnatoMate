@@ -70,12 +70,8 @@ const PictureProcessing = () => {
         )}
         {showModel && <Model keypoints={modelKeypoints} />}
       </PictureContainer>
-      <button onClick={handleNewUpload}>Reset Image</button>
-      {/* <Switch
-        checked={showModel}
-        onChange={(value) => handleShowModel(value)}
-      /> */}
-      <Switch checked={showModel} onChange={(value) => setShowModel(value)} />
+      {/* <button onClick={handleNewUpload}>Reset Image</button>
+      <Switch checked={showModel} onChange={(value) => setShowModel(value)} /> */}
     </>
   );
 };

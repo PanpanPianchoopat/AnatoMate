@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { PageContainer, SectionsContainer, Header } from "./styled";
 import PictureProcessing from "../../components/Analyse/PictureProcessing";
 import HowTo from "./components/HowTo";
@@ -6,26 +6,18 @@ import Suggestions from "./components/Suggestions";
 import NavButton from "../../components/NavButton";
 
 const Analyse = () => {
+  const [showModel, setShowModel] = useState(false);
+  useEffect(() => {
+    console.log("SHOW", showModel);
+  }, [showModel]);
+
   return (
     <PageContainer>
       <Header>AnatoMate</Header>
       <SectionsContainer>
         <HowTo />
-
-        <div
-          style={{
-            width: "500px",
-            height: "500px",
-            border: "3px solid black",
-            background: "white",
-          }}
-        >
-          image section mock
-        </div>
-
-        {/* <PictureProcessing /> */}
-
-        <Suggestions />
+        <PictureProcessing showModel={showModel} />
+        <Suggestions showModel={showModel} setShowModel={setShowModel} />
       </SectionsContainer>
     </PageContainer>
   );
