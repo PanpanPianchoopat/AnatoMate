@@ -9,6 +9,7 @@ export const PictureContainer = styled.div`
   align-items: center;
   margin: 3px 0;
   position: relative;
+  background: white;
 `;
 export const UploadedImage = styled.img`
   width: 100%;

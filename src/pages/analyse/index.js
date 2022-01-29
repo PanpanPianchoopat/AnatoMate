@@ -1,21 +1,32 @@
-import React, { useState, useRef } from "react";
-import Container from "../../components/Container";
-import { SectionsContainer } from "./styled";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  PageContainer,
+  ContentWrapper,
+  SectionsContainer,
+  Header,
+} from "./styled";
 import PictureProcessing from "../../components/Analyse/PictureProcessing";
+import HowTo from "./components/HowTo";
+import Suggestions from "./components/Suggestions";
+import NavButton from "../../components/NavButton";
 
 const Analyse = () => {
-  const imgRef = useRef();
+  const [showModel, setShowModel] = useState(false);
+  useEffect(() => {
+    console.log("SHOW", showModel);
+  }, [showModel]);
+
   return (
-    <Container>
-      <h1>AnatoMate</h1>
-      <SectionsContainer>
-        <div>Howto</div>
-
-        <PictureProcessing />
-
-        <div>comments</div>
-      </SectionsContainer>
-    </Container>
+    <PageContainer>
+      <ContentWrapper>
+        <Header>AnatoMate</Header>
+        <SectionsContainer>
+          <HowTo />
+          <PictureProcessing showModel={showModel} />
+          <Suggestions showModel={showModel} setShowModel={setShowModel} />
+        </SectionsContainer>
+      </ContentWrapper>
+    </PageContainer>
   );
 };
 
