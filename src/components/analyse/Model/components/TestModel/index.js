@@ -201,7 +201,7 @@ const rotateArm = (side, keypoints, nodes) => {
 
   function findCriLevel(current_length, good_length)
   {
-    var cri_level = "low";
+    var cri_level = 0;
     
     const diff = Math.abs(current_length - good_length);
 
@@ -209,13 +209,13 @@ const rotateArm = (side, keypoints, nodes) => {
 
 
     if (diff_percent > 0.05 && diff_percent <= 0.1)
-      cri_level = "low";
+      cri_level = 1;
     else if (diff_percent > 0.1 && diff_percent <= 0.3)
-      cri_level = "medium";
+      cri_level = 2;
     else if (diff_percent > 0.3)
-      cri_level = "high";
+      cri_level = 3;
     else
-      cri_level = "OK";
+      cri_level = 0;
     
     return cri_level;
   }
@@ -238,7 +238,7 @@ const rotateArm = (side, keypoints, nodes) => {
     
     const cri_val = findCriLevel(length, headSize * head_ratio);
     var this_comment = null;
-    if( cri_val !== "OK")
+    if( cri_val !== 0)
       this_comment = {
         part: part_name, 
         comment: `${side} ${part_name} ${thisSuffix}`,
