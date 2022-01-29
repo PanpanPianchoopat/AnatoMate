@@ -6,7 +6,7 @@ import ImgCrop from "antd-img-crop";
 import Pose from "../Pose";
 import Model from "../Model";
 
-const PictureProcessing = () => {
+const PictureProcessing = ({ ...props }) => {
   const [picture, setPicture] = useState(null);
   const [finishUpload, setFinishUpload] = useState(false);
   const imgRef = useRef();
@@ -27,11 +27,17 @@ const PictureProcessing = () => {
     setShowPoints(false);
     setShowModel(false);
   };
-
-  // const handleShowModel = (value) => {
-  //   setShowModel(value);
-  //   setShowPoints(false);
-  // };
+  useEffect(() => {
+    if (props) {
+      if (props.isReset) {
+        setPicture(null);
+        setFinishUpload(false);
+        setShowPoints(false);
+        setShowModel(false);
+        props.setIsReset(false);
+      }
+    }
+  }, [props]);
 
   const [showPoints, setShowPoints] = useState(false);
   const [showModel, setShowModel] = useState(false);
@@ -72,10 +78,10 @@ const PictureProcessing = () => {
             setModelKeypoints={setModelKeypoints}
           />
         )}
-        {showModel && <Model keypoints={modelKeypoints} />}
+        {props && props.showModel && <Model keypoints={modelKeypoints} />}
       </PictureContainer>
       {/* <button onClick={handleNewUpload}>Reset Image</button>
-      <Switch checked={showModel} onChange={(value) => setShowModel(value)} /> */}
+       */}
     </>
   );
 };

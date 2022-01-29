@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, Collapse, Col, Tooltip } from "antd";
 import { SuggestionsWrapper, NoComment, Smiley } from "./styled";
 import COLORS from "../../../../../public/constants/colors";
@@ -43,7 +43,13 @@ const Suggestions = ({ ...props }) => {
   const [comments, setComments] = useState(1);
   const showModel = props ? props.showModel : false;
   const { Panel } = Collapse;
-  // const [showModel, setShowModel] = useState(false);
+  const [reset, setReset] = useState(false);
+
+  useEffect(() => {
+    if (props) {
+      setReset(props.isReset);
+    }
+  }, [props]);
 
   const popContent = (
     <div style={{ margin: "10px 5px 0 5px" }}>
@@ -53,6 +59,11 @@ const Suggestions = ({ ...props }) => {
     </div>
   );
 
+  function handleReset() {
+    setReset(!reset);
+    props.setIsReset(!reset);
+  }
+
   return (
     <SuggestionsWrapper>
       <Button color="transparent" style={{ width: "100%", fontWeight: "bold" }}>
@@ -61,6 +72,7 @@ const Suggestions = ({ ...props }) => {
       <Button
         color="transparent"
         style={{ width: "100%", fontWeight: "bold", margin: "15px 0" }}
+        onClick={handleReset}
       >
         Reupload Photo
       </Button>
