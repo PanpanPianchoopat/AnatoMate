@@ -30,4 +30,5 @@ export const SectionsContainer = styled.div`
   width: 100%;
   height: calc(100% - 70px);
   justify-content: space-between;
+  margin-top: 30px;
 `;

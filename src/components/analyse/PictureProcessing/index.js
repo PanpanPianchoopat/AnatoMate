@@ -51,8 +51,9 @@ const PictureProcessing = () => {
               onChange={(info) => handleChange(info)}
               maxCount={1}
             >
-              +<br />
-              Upload Photo
+              Upload
+              <br />
+              Photo
             </Upload>
           </ImgCrop>
         )}

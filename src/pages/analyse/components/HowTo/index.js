@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form, InputNumber, Radio, Input, Select } from "antd";
 import {
   SectionWrapper,
@@ -10,9 +10,21 @@ import {
 import Button from "../../../../components/Button";
 
 const HowTo = () => {
+  const [disabled, setDisabled] = useState(false);
+  const [unit, setUnit] = useState("unit");
   const logChage = (val) => {
     console.log(val);
   };
+
+  const [form] = Form.useForm();
+  const resetForm = () => {
+    form.resetFields();
+  };
+
+  useEffect(() => {
+    document.getElementById("apply-button").disabled = disabled;
+  }, [disabled]);
+
   return (
     <SectionWrapper>
       <SectionHeader>How To</SectionHeader>
@@ -22,20 +34,27 @@ const HowTo = () => {
         <br />
         2. Manually adjust the point for each limb
         <br />
-        3. Click “Analyze” to let the system check your anatomy <br />
+        3. Click “Comparison” to let the system show the correct anatomy <br />
         4. Then you can improve your drawing from our suggestion
       </Instruction>
+
       <SectionHeader>Preference</SectionHeader>
       <SectionUnderline />
       <Form
+        form={form}
         size="medium"
         layout="vertical"
+        initialValues={{
+          ratio_unit: 1,
+          ratio_px: 1,
+        }}
         onFinish={logChage}
         style={{ marginRight: "15px" }}
       >
         <Form.Item label="Character's height" style={{ marginBottom: "15px" }}>
           <Form.Item name="char_height" noStyle>
             <InputNumber
+              min={1}
               placeholder="height"
               style={{
                 border: "2px solid black",
@@ -45,9 +64,10 @@ const HowTo = () => {
               }}
             />
           </Form.Item>
-          <Form.Item name="unit" noStyle>
+          <Form.Item name="height_unit" noStyle>
             <Select
               placeholder="unit"
+              onChange={(unit) => setUnit(unit)}
               style={{
                 border: "2px solid black",
                 display: "inline-block",
@@ -69,10 +89,11 @@ const HowTo = () => {
             </Select>
           </Form.Item>
         </Form.Item>
-        <Form.Item label="Ratio (cm : px)">
-          <Form.Item name="cm" noStyle>
+        <Form.Item label={`Ratio ${unit} : px`}>
+          <Form.Item name="ratio_unit" noStyle>
             <InputNumber
-              placeholder="cm"
+              min={1}
+              placeholder="unit"
               style={{
                 border: "2px solid black",
                 display: "inline-block",
@@ -80,8 +101,9 @@ const HowTo = () => {
               }}
             />
           </Form.Item>
-          <Form.Item name="px" noStyle>
+          <Form.Item name="ratio_px" noStyle>
             <InputNumber
+              min={1}
               placeholder="px"
               style={{
                 border: "2px solid black",
@@ -94,8 +116,17 @@ const HowTo = () => {
         </Form.Item>
         <Form.Item>
           <ButtonGroup>
-            <Button color="transparent">Reset</Button>
-            <Button type="submit" style={{ marginLeft: "10px" }}>
+            <Button color="transparent" type="reset" onClick={resetForm}>
+              Reset
+            </Button>
+            <Button
+              type="submit"
+              id="apply-button"
+              style={{
+                marginLeft: "10px",
+                cursor: disabled ? "not-allowed" : "pointer",
+              }}
+            >
               Apply
             </Button>
           </ButtonGroup>
