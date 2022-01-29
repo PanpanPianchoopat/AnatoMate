@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Upload, Switch } from "antd";
 import { PictureContainer, UploadedImage } from "./styled";
+import ImgCrop from "antd-img-crop";
 
 import Pose from "../Pose";
 import Model from "../Model";
@@ -42,16 +43,18 @@ const PictureProcessing = () => {
     <>
       <PictureContainer>
         {!finishUpload && (
-          <Upload
-            listType="picture-card"
-            defaultFileList={picture}
-            showUploadList={false}
-            onChange={(info) => handleChange(info)}
-            maxCount={1}
-          >
-            +<br />
-            Upload Photo
-          </Upload>
+          <ImgCrop quality={1} rotate={true} grid={true}>
+            <Upload
+              listType="picture-card"
+              defaultFileList={picture}
+              showUploadList={false}
+              onChange={(info) => handleChange(info)}
+              maxCount={1}
+            >
+              +<br />
+              Upload Photo
+            </Upload>
+          </ImgCrop>
         )}
         {picture && (
           <UploadedImage

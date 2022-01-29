@@ -18,3 +18,15 @@ export const SectionUnderline = styled.div`
   background: black;
   margin-bottom: 20px;
 `;
+
+export const Instruction = styled.p`
+  text-align: justify;
+  margin-right: 15px;
+  margin-bottom: 30px;
+`;
+
+export const ButtonGroup = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;

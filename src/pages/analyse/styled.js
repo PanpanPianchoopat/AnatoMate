@@ -9,6 +9,15 @@ export const PageContainer = styled.div`
   border: 25px solid ${COLORS.DARK_PURPLE};
   padding: 20px 5vw;
   font-family: ${DEFAULT_FONT};
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+`;
+
+export const ContentWrapper = styled.div`
+  width: 100%;
+  min-width: 1024px;
+  max-width: 1920px;
 `;
 
 export const Header = styled.h1`
