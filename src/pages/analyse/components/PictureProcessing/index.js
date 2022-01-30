@@ -70,6 +70,7 @@ const PictureProcessing = ({ ...props }) => {
             setOriginalKeypoints={props.setOriginalKeypoints}
             setModelKeypoints={setModelKeypoints}
             setIsModelReady={props.setIsModelReady}
+            setIsResetImg={props.setIsResetImg}
           />
         )}
         {props && props.showModel && (

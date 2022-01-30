@@ -6,7 +6,7 @@ import Circle from "./components/Circle";
 import "@tensorflow/tfjs-backend-webgl";
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import merge from "lodash.merge";
-import { Modal } from "antd";
+import { message, Modal } from "antd";
 
 async function PostEstimation(image) {
   const model = poseDetection.SupportedModels.MoveNet;
@@ -20,45 +20,52 @@ function FindKeypoints(
   pose,
   updatedJoints,
   setModelKeypoints,
-  setIsModelReady
+  setIsModelReady,
+  resetImg
 ) {
   let keypoints = [];
   let score;
   let poseEs = {};
 
-  PostEstimation(image).then((e) => {
-    score = e[0].score;
-    e[0].keypoints.forEach((p) => {
-      const x = p.x;
-      const y = p.y;
-      if (!UNWANTED_POINTS.includes(p.name)) {
-        keypoints.push({
-          name: NAMINGS[p.name],
-          x: x,
-          y: y,
-          confident: p.score,
-        });
-        poseEs[NAMINGS[p.name]] = [x, y];
-      }
+  PostEstimation(image)
+    .then((e) => {
+      score = e[0].score;
+      e[0].keypoints.forEach((p) => {
+        const x = p.x;
+        const y = p.y;
+        if (!UNWANTED_POINTS.includes(p.name)) {
+          keypoints.push({
+            name: NAMINGS[p.name],
+            x: x,
+            y: y,
+            confident: p.score,
+          });
+          poseEs[NAMINGS[p.name]] = [x, y];
+        }
+      });
+      setModelKeypoints(keypoints);
+      pose.joints = poseEs;
+      setPose(Object.assign({}, pose, { edges: updatedJoints }));
+      setIsModelReady(true);
+      Modal.info({
+        title: "Please verify the keypoints",
+        content: (
+          <div>
+            <p>
+              After turning on the Comparison switch, you cannot go back and
+              edit the keypoints.
+              <br />
+              (You can adjust the keypoints by draging them.)
+            </p>
+          </div>
+        ),
+      });
+    })
+    .catch((e) => {
+      console.log("Pose_Estimation_Error", e);
+      message.error("Cannot detect human, please upload another picture.");
+      resetImg(true);
     });
-    setModelKeypoints(keypoints);
-    pose.joints = poseEs;
-    setPose(Object.assign({}, pose, { edges: updatedJoints }));
-    setIsModelReady(true);
-    Modal.info({
-      title: "Please verify the keypoints",
-      content: (
-        <div>
-          <p>
-            After turning on the Comparison switch, you cannot go back and edit
-            the keypoints.
-            <br />
-            (You can adjust the keypoints by draging them.)
-          </p>
-        </div>
-      ),
-    });
-  });
 }
 
 const Pose = ({ ...props }) => {
@@ -120,7 +127,8 @@ const Pose = ({ ...props }) => {
         pose,
         updatedJoints,
         props.setModelKeypoints,
-        props.setIsModelReady
+        props.setIsModelReady,
+        props.setIsResetImg
       );
     }
   }, [props.finishProcess]);
