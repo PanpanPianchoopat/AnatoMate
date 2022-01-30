@@ -1,24 +1,16 @@
-import React, { useState } from "react";
-import { Switch, Collapse, Col, Tooltip } from "antd";
-import { SuggestionsWrapper, NoComment, Smiley } from "./styled";
+import React, { useEffect, useState } from "react";
+import { Switch, Collapse, Radio, Tooltip } from "antd";
+import {
+  SuggestionsWrapper,
+  Detail,
+  NoComment,
+  Smiley,
+  ButtonGroup,
+  OptionButton,
+} from "./styled";
 import COLORS from "../../../../../public/constants/colors";
 import Button from "../../../../components/Button";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
-
-const MOCK_COMMENTS = [
-  { header: "Test3", comments: "Tpp short", severity: 2 },
-  {
-    header:
-      "Puff the magic dragon lived by the sea And frolicked in the autumn mist in a land called Honah Lee Little Jackie Paper loved that rascal Puff And brought him strings and sealing wax and other fancy stuff",
-    comments:
-      "ในโลกที่มี ความวกวนในโลกที่ทุกคนต้องดิ้นรนที่สับสน ร้อนรนจนใจ นั้นแสนเหนื่อยในโลกที่ความทุกข์ท้อใจได้เดินผ่านเข้ามาเรื่อยๆจนบางครั้งไม่รู้จะข้ามไปเช่นไร",
-    severity: 3,
-  },
-  { header: "Test2", comments: "Tpp long", severity: 2 },
-  { header: "Test3", comments: "Tpp short", severity: 1 },
-  { header: "Test3", comments: "Tpp short", severity: 1 },
-  { header: "Test3", comments: "Tpp short", severity: 1 },
-];
 
 function getTagColor(severity) {
   if (severity == 3) {
@@ -40,10 +32,29 @@ export const CustomPanel = ({ headerInfo, children, ...props }) => {
 };
 
 const Suggestions = ({ ...props }) => {
-  const [comments, setComments] = useState(1);
+  const skinOption = ["transparent", "opaque"];
   const showModel = props ? props.showModel : false;
   const { Panel } = Collapse;
-  // const [showModel, setShowModel] = useState(false);
+  const [reset, setReset] = useState(false);
+
+  // disable reset keypoints to original position
+  const [disableReKey, isDisableReKey] = useState(false);
+  // disable re-upload new photo
+  const [disableRePic, isDisableRePic] = useState(false);
+
+  useEffect(() => {
+    if (props) {
+      setReset(props.isResetImg);
+    }
+  }, [props]);
+
+  useEffect(() => {
+    console.log("REC_SUGG", props.suggestions);
+  }, [props.suggestions]);
+
+  useEffect(() => {
+    document.getElementById("re-pic-but").disabled = disableRePic;
+  }, [disableRePic]);
 
   const popContent = (
     <div style={{ margin: "10px 5px 0 5px" }}>
@@ -53,71 +64,95 @@ const Suggestions = ({ ...props }) => {
     </div>
   );
 
+  function handleResetImg() {
+    setReset(!reset);
+    props.setIsResetImg(true);
+    props.setShowModel(false);
+    props.setSuggestions([]);
+  }
+
+  function handleSwitch(isChecked) {
+    props.setShowModel(isChecked);
+    props.setShowPoints(false);
+  }
+
   return (
     <SuggestionsWrapper>
-      <Button color="transparent" style={{ width: "100%", fontWeight: "bold" }}>
-        Reset Keypoint
-      </Button>
       <Button
+        id="re-pic-but"
         color="transparent"
-        style={{ width: "100%", fontWeight: "bold", margin: "15px 0" }}
+        disable={disableRePic}
+        onClick={() => handleResetImg()}
+        style={{ width: "100%", fontWeight: "bold", margin: "3px 0" }}
       >
         Reupload Photo
       </Button>
+
       <div style={{ display: "flex", alignItems: "center", margin: "5px 0" }}>
         <h2 style={{ margin: "0" }}>Suggestions</h2>
         <Tooltip title={popContent} color="#404040">
           <AiOutlineQuestionCircle
-            style={{ fontSize: "1.5em", marginLeft: "5px", cursor: "pointer" }}
+            style={{
+              fontSize: "1.5em",
+              marginLeft: "5px",
+              cursor: "pointer",
+            }}
           />
         </Tooltip>
       </div>
 
-      <div>
+      <div style={{ marginBottom: "10px" }}>
         Comparison
         <Switch
           checked={showModel}
-          onChange={(val) => props.setShowModel(val)}
+          onChange={(isChecked) => handleSwitch(isChecked)}
           style={{
             marginLeft: "10px",
             background: showModel ? COLORS.DARK_PURPLE : "#dddddd",
           }}
         />
       </div>
+      {showModel && (
+        <ButtonGroup>
+          {skinOption.map((option, idx) => (
+            <OptionButton
+              key={idx}
+              onClick={() => props.setModelSkin(option)}
+              isActive={props.modelSkin === option}
+            >
+              {option}
+            </OptionButton>
+          ))}
+        </ButtonGroup>
+      )}
 
-      {comments ? (
+      {props && props.suggestions ? (
         <div
           style={{
-            height: "320px",
+            height: `${showModel ? "330px" : "370px"}`,
             overflow: "auto",
             marginTop: "10px",
           }}
         >
           <Collapse accordion expandIcon={() => null} bordered={false}>
-            {MOCK_COMMENTS.sort((a, b) =>
-              a.severity > b.severity ? -1 : 1
-            ).map((comment, idx) => (
-              <Panel
-                key={idx}
-                header={comment.header}
-                style={{
-                  border: "2px solid black",
-                  marginBottom: "15px",
-                  background: `linear-gradient(90deg, ${getTagColor(
-                    comment.severity
-                  )} 10px, white 0%)`,
-                }}
-              >
-                <p
+            {props.suggestions
+              .sort((a, b) => (a.severity > b.severity ? -1 : 1))
+              .map((comment, idx) => (
+                <Panel
+                  key={idx}
+                  header={comment.header}
                   style={{
-                    fontSize: "0.8em",
-                    overflow: "hidden",
+                    border: "2px solid black",
+                    marginBottom: "15px",
+                    background: `linear-gradient(90deg, ${getTagColor(
+                      comment.severity
+                    )} 10px, white 0%)`,
+                    fontWeight: "bold",
                   }}
                 >
-                  {comment.comments}
-                </p>
-              </Panel>
-            ))}
+                  <Detail>{comment.comments}</Detail>
+                </Panel>
+              ))}
           </Collapse>
         </div>
       ) : (

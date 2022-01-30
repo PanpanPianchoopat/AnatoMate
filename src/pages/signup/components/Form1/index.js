@@ -53,7 +53,6 @@ const Form1 = () => {
         .signup(userInfo)
         .then((res) => {
           if (res) {
-            console.log(res.data);
             router.push("/");
           }
         })

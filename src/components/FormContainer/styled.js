@@ -9,7 +9,7 @@ export const LayerContainer = styled.div`
   margin: auto;
   border: 3px solid black;
   overflow: visible;
-  font-family: Montserrat;
+  font-family: "Montserrat", sans-serif;
 `;
 
 export const StyledFormContainer = styled.div`

@@ -3,7 +3,8 @@
   border: 25px solid #43065f;
   width: 100%;
   height: 100vh;
-  font-family: 'Montserrat';
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .content {
@@ -11,7 +12,7 @@
  flex-direction: column;
  align-self: center;
  width: 50%;
- font-family: 'Montserrat';
+ font-family: 'Montserrat', sans-serif;
 }
 
 .header {
@@ -27,8 +28,8 @@
 
 .model {
   align-self: center;
-  width: 40%;
-  height: 50%;
+  max-width: 50%;
+  max-height: 50%;
   right: 0;
   position: absolute;
   display: flex;

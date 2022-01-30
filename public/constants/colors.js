@@ -6,6 +6,7 @@ const COLORS = {
   SALMON: "#FEBBAB",
   ERROR_RED: "#D83B3B",
   PRIMARY_PINK: "#C53163",
+  GREY: "#aaaaaa",
 };
 
 export default COLORS;

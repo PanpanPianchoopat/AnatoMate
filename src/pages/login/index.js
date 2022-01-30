@@ -13,17 +13,14 @@ const Login = () => {
   const [invalid, setInvalid] = useState(false);
 
   const handleSubmit = (value) => {
-    console.log(value);
     userAPI
       .login(value)
       .then((res) => {
         if (res) {
-          console.log("USER", res.data);
           router.push("/analyse");
         }
       })
       .catch((e) => {
-        console.log(e);
         setInvalid(true);
       });
   };
