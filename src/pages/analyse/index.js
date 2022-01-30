@@ -13,6 +13,7 @@ const Analyse = () => {
   const [showModel, setShowModel] = useState(false);
   const [isReset, setIsReset] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [modelSkin, setModelSkin] = useState("transparent");
 
   // character's height
   const [customHeight, setCustomHeight] = useState(0);
@@ -36,11 +37,13 @@ const Analyse = () => {
             customHeight={customHeight}
             setCustomHeight={setCustomHeight}
             showModel={showModel}
+            isReset={isReset}
           />
           <PictureProcessing
             customHeight={customHeight}
             setCustomHeight={setCustomHeight}
             showModel={showModel}
+            modelSkin={modelSkin}
             isReset={isReset}
             setIsReset={setIsReset}
             setSuggestions={setSuggestions}
@@ -48,6 +51,8 @@ const Analyse = () => {
           <Suggestions
             showModel={showModel}
             setShowModel={setShowModel}
+            modelSkin={modelSkin}
+            setModelSkin={setModelSkin}
             isReset={isReset}
             setIsReset={setIsReset}
             suggestions={suggestions}

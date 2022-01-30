@@ -30,6 +30,7 @@ const Model = ({ ...props }) => {
               customHeight={props.customHeight}
               setCustomHeight={props.setCustomHeight}
               setSuggestions={props.setSuggestions}
+              modelSkin={props.modelSkin}
             />
           )}
         </Suspense>

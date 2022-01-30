@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Collapse, Radio, Tooltip } from "antd";
-import { SuggestionsWrapper, NoComment, Smiley } from "./styled";
+import {
+  SuggestionsWrapper,
+  NoComment,
+  Smiley,
+  ButtonGroup,
+  OptionButton,
+} from "./styled";
 import COLORS from "../../../../../public/constants/colors";
 import Button from "../../../../components/Button";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
@@ -65,11 +71,8 @@ const Suggestions = ({ ...props }) => {
     setReset(!reset);
     props.setIsReset(true);
   }
-  const [modelSkin, setModelSkin] = useState("transparent");
-  const skinOption = [
-    { label: "transparent", value: "transparent" },
-    { label: "opaque", value: "opaque" },
-  ];
+  const skinOption = ["transparent", "opaque"];
+
   return (
     <SuggestionsWrapper>
       <Button
@@ -98,7 +101,7 @@ const Suggestions = ({ ...props }) => {
         </Tooltip>
       </div>
 
-      <div style={{ background: "pink" }}>
+      <div style={{ marginBottom: "10px" }}>
         Comparison
         <Switch
           checked={showModel}
@@ -108,19 +111,25 @@ const Suggestions = ({ ...props }) => {
             background: showModel ? COLORS.DARK_PURPLE : "#dddddd",
           }}
         />
-        <div>
-          {skinOption.map((option, idx) => (
-            <div key={idx} style={{ border: "2px solid black" }}>
-              {option.label}
-            </div>
-          ))}
-        </div>
       </div>
+      {showModel && (
+        <ButtonGroup>
+          {skinOption.map((option, idx) => (
+            <OptionButton
+              key={idx}
+              onClick={() => props.setModelSkin(option)}
+              isActive={props.modelSkin === option}
+            >
+              {option}
+            </OptionButton>
+          ))}
+        </ButtonGroup>
+      )}
 
       {props && props.suggestions ? (
         <div
           style={{
-            height: "320px",
+            height: `${showModel ? "270px" : "320px"}`,
             overflow: "auto",
             marginTop: "10px",
           }}
