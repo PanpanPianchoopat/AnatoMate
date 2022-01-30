@@ -76,7 +76,6 @@ const HowTo = ({ ...props }) => {
           <Form.Item name="char_height" noStyle>
             <InputNumber
               disabled={disabled}
-              defaultValue={100}
               placeholder="height"
               style={{
                 border: `2px solid ${

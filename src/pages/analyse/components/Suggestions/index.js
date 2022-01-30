@@ -129,7 +129,7 @@ const Suggestions = ({ ...props }) => {
       {props && props.suggestions ? (
         <div
           style={{
-            height: "270px",
+            height: `${showModel ? "270px" : "320px"}`,
             overflow: "auto",
             marginTop: "10px",
           }}
