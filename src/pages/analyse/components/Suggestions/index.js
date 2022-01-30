@@ -32,29 +32,25 @@ export const CustomPanel = ({ headerInfo, children, ...props }) => {
 };
 
 const Suggestions = ({ ...props }) => {
-  const [comments, setComments] = useState(1);
+  const skinOption = ["transparent", "opaque"];
   const showModel = props ? props.showModel : false;
   const { Panel } = Collapse;
   const [reset, setReset] = useState(false);
 
   // disable reset keypoints to original position
-  const [disableReKey, isDisableReKey] = useState(true);
+  const [disableReKey, isDisableReKey] = useState(false);
   // disable re-upload new photo
   const [disableRePic, isDisableRePic] = useState(false);
 
   useEffect(() => {
     if (props) {
-      setReset(props.isReset);
+      setReset(props.isResetImg);
     }
   }, [props]);
 
   useEffect(() => {
     console.log("REC_SUGG", props.suggestions);
   }, [props.suggestions]);
-
-  useEffect(() => {
-    document.getElementById("re-key-but").disabled = disableReKey;
-  }, [disableReKey]);
 
   useEffect(() => {
     document.getElementById("re-pic-but").disabled = disableRePic;
@@ -68,28 +64,26 @@ const Suggestions = ({ ...props }) => {
     </div>
   );
 
-  function handleReset() {
+  function handleResetImg() {
     setReset(!reset);
-    props.setIsReset(true);
+    props.setIsResetImg(true);
+    props.setShowModel(false);
+    props.setSuggestions([]);
   }
-  const skinOption = ["transparent", "opaque"];
+
+  function handleSwitch(isChecked) {
+    props.setShowModel(isChecked);
+    props.setShowPoints(false);
+  }
 
   return (
     <SuggestionsWrapper>
       <Button
-        id="re-key-but"
-        color="transparent"
-        disable={disableReKey}
-        style={{ width: "100%", fontWeight: "bold" }}
-      >
-        Reset Keypoint
-      </Button>
-      <Button
         id="re-pic-but"
         color="transparent"
         disable={disableRePic}
-        style={{ width: "100%", fontWeight: "bold", margin: "15px 0" }}
-        onClick={handleReset}
+        onClick={() => handleResetImg()}
+        style={{ width: "100%", fontWeight: "bold", margin: "3px 0" }}
       >
         Reupload Photo
       </Button>
@@ -98,7 +92,11 @@ const Suggestions = ({ ...props }) => {
         <h2 style={{ margin: "0" }}>Suggestions</h2>
         <Tooltip title={popContent} color="#404040">
           <AiOutlineQuestionCircle
-            style={{ fontSize: "1.5em", marginLeft: "5px", cursor: "pointer" }}
+            style={{
+              fontSize: "1.5em",
+              marginLeft: "5px",
+              cursor: "pointer",
+            }}
           />
         </Tooltip>
       </div>
@@ -107,7 +105,7 @@ const Suggestions = ({ ...props }) => {
         Comparison
         <Switch
           checked={showModel}
-          onChange={(val) => props.setShowModel(val)}
+          onChange={(isChecked) => handleSwitch(isChecked)}
           style={{
             marginLeft: "10px",
             background: showModel ? COLORS.DARK_PURPLE : "#dddddd",
@@ -131,7 +129,7 @@ const Suggestions = ({ ...props }) => {
       {props && props.suggestions ? (
         <div
           style={{
-            height: `${showModel ? "270px" : "320px"}`,
+            height: `${showModel ? "330px" : "370px"}`,
             overflow: "auto",
             marginTop: "10px",
           }}
@@ -149,6 +147,7 @@ const Suggestions = ({ ...props }) => {
                     background: `linear-gradient(90deg, ${getTagColor(
                       comment.severity
                     )} 10px, white 0%)`,
+                    fontWeight: "bold",
                   }}
                 >
                   <Detail>{comment.comments}</Detail>

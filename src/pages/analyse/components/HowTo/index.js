@@ -16,19 +16,10 @@ const HowTo = ({ ...props }) => {
 
   const [form] = Form.useForm();
   const onFinish = (val) => {
-    console.log(val);
-    // const characterHeight =
-    //   props.customHeight *
-    //   (form.getFieldValue("ratio_unit") / form.getFieldValue("ratio_px"));
-    // console.log("CAL_H", characterHeight);
-
-    // props.setCustomHeight(form.getFieldValue("char_height"));
-    console.log(val);
     props.setCustomHeight(val);
   };
 
   useEffect(() => {
-    console.log("RECIEVE_HEGIHT", props.charHeight);
     form.setFieldsValue({ char_height: Math.round(props.charHeight) });
   }, [props.charHeight]);
 

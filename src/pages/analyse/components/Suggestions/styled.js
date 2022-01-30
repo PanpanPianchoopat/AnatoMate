@@ -40,6 +40,7 @@ export const Detail = styled.p`
   font-size: 0.8em;
   overflow: hidden;
   white-space: pre-wrap;
+  font-weight: normal;
 `;
 
 export const NoComment = styled.div`

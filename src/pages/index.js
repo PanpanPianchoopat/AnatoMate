@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import styles from "../../styles/Home.module.css";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
@@ -39,9 +40,8 @@ export default function Home() {
               Try now
             </Button>
           </div>
-          <div className={styles.model}>
-            <img src="https://www.nicepng.com/png/full/938-9383870_skeletal-muscle-human-body-skeleton-transprent-png-muscular.png" />
-          </div>
+
+          <img src="/coverImg.png" className={styles.model} />
         </Container>
       </main>
     </div>

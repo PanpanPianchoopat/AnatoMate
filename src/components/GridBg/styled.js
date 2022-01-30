@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import COLORS from "../../../public/constants/colors";
-import DEFAULT_FONT from "../../../public/constants/fonts";
 import { AiFillLeftCircle } from "react-icons/ai";
 
 export const Grid = styled.div`
@@ -14,7 +13,7 @@ export const Grid = styled.div`
     ),
     linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0.1em, transparent 0.1em);
   background-size: 3em 3em;
-  font-family: ${DEFAULT_FONT};
+  font-family: "Montserrat", sans-serif;
 `;
 
 export const BackHome = styled.div`

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Upload, Switch } from "antd";
+import { Upload } from "antd";
 import { PictureContainer, UploadedImage } from "./styled";
 import ImgCrop from "antd-img-crop";
 
@@ -7,6 +7,7 @@ import Pose from "./components/Pose";
 import Model from "./components/Model";
 
 const PictureProcessing = ({ ...props }) => {
+  // const [showPoints, setShowPoints] = useState(false);
   const [picture, setPicture] = useState(null);
   const [finishUpload, setFinishUpload] = useState(false);
   const imgRef = useRef();
@@ -16,35 +17,26 @@ const PictureProcessing = ({ ...props }) => {
       reader.addEventListener("load", () => {
         setPicture(reader.result);
         setFinishUpload(true);
-        setShowPoints(true);
+        props.setShowPoints(true);
       });
       reader.readAsDataURL(info.file.originFileObj);
     }
   };
-  const handleNewUpload = () => {
-    setPicture(null);
-    setFinishUpload(false);
-    setShowPoints(false);
-    setShowModel(false);
-  };
+
   useEffect(() => {
     if (props) {
-      if (props.isReset) {
+      if (props.isResetImg) {
         setPicture(null);
         setFinishUpload(false);
-        setShowPoints(false);
-        setShowModel(false);
-        props.setIsReset(false);
+        props.setShowPoints(false);
+        props.setIsModelReady(false);
+        props.setIsResetImg(false);
       }
     }
   }, [props]);
 
-  const [showPoints, setShowPoints] = useState(false);
-  const [showModel, setShowModel] = useState(false);
   const [modelKeypoints, setModelKeypoints] = useState(null);
-  useEffect(() => {
-    console.log("KEYPOINTS", modelKeypoints);
-  }, [modelKeypoints]);
+
   return (
     <>
       <PictureContainer>
@@ -69,13 +61,15 @@ const PictureProcessing = ({ ...props }) => {
             crossOrigin="annonymous"
             ref={imgRef}
             src={picture}
-            onClick={handleNewUpload}
           />
         )}
-        {showPoints && (
+        {props.showPoints && (
           <Pose
             finishProcess={finishUpload}
+            originalKeypoints={props.originalKeypoints}
+            setOriginalKeypoints={props.setOriginalKeypoints}
             setModelKeypoints={setModelKeypoints}
+            setIsModelReady={props.setIsModelReady}
           />
         )}
         {props && props.showModel && (

@@ -10,6 +10,7 @@ import {
 } from "../../../../../../../../../public/constants/canva";
 import { BONE_NAMES, POINT_NAMES } from "../../constant";
 import * as THREE from "three";
+import { round } from "lodash";
 
 // Convert pixel to 3D canva coordinate
 function findPosition(position) {
@@ -265,7 +266,17 @@ function getComment(
   };
   const length_comment = {
     same: "",
-    diff: `\nNOTE: Your prefer height is ${fullBody} ${current_ratio.unit} but the actual height from our calculation is ${actual_fullBody} ${current_ratio.unit}\nSo, your prefer ${part_name} length should be ${prefer_length} ${current_ratio.unit} (Current is ${actual_length} ${current_ratio.unit})`,
+    diff: `\n\nNOTE: Your prefer height is ${Math.round(fullBody)} ${
+      current_ratio.unit
+    } but the actual height from our calculation is ${Math.round(
+      actual_fullBody
+    )} ${
+      current_ratio.unit
+    }\nSo, your prefer ${part_name} length should be ${Math.round(
+      prefer_length
+    )} ${current_ratio.unit} (Current is ${Math.round(actual_length)} ${
+      current_ratio.unit
+    })`,
   };
 
   var thisSuffix = "";

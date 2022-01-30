@@ -6,6 +6,7 @@ import Circle from "./components/Circle";
 import "@tensorflow/tfjs-backend-webgl";
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import merge from "lodash.merge";
+import { Modal } from "antd";
 
 async function PostEstimation(image) {
   const model = poseDetection.SupportedModels.MoveNet;
@@ -13,13 +14,19 @@ async function PostEstimation(image) {
   return await detector.estimatePoses(image);
 }
 
-function FindKeypoints(image, setPose, pose, updatedJoints, setModelKeypoints) {
+function FindKeypoints(
+  image,
+  setPose,
+  pose,
+  updatedJoints,
+  setModelKeypoints,
+  setIsModelReady
+) {
   let keypoints = [];
   let score;
   let poseEs = {};
 
   PostEstimation(image).then((e) => {
-    console.log("POSENET", e);
     score = e[0].score;
     e[0].keypoints.forEach((p) => {
       const x = p.x;
@@ -37,6 +44,20 @@ function FindKeypoints(image, setPose, pose, updatedJoints, setModelKeypoints) {
     setModelKeypoints(keypoints);
     pose.joints = poseEs;
     setPose(Object.assign({}, pose, { edges: updatedJoints }));
+    setIsModelReady(true);
+    Modal.info({
+      title: "Please verify the keypoints",
+      content: (
+        <div>
+          <p>
+            After turning on the Comparison switch, you cannot go back and edit
+            the keypoints.
+            <br />
+            (You can adjust the keypoints by draging them.)
+          </p>
+        </div>
+      ),
+    });
   });
 }
 
@@ -61,6 +82,10 @@ const Pose = ({ ...props }) => {
       }
       props.setModelKeypoints(newKeypoints);
     }
+  }, [pose]);
+
+  useEffect(() => {
+    console.log("CHANGE", pose);
   }, [pose]);
 
   const updatedJoints = [
@@ -89,7 +114,14 @@ const Pose = ({ ...props }) => {
   useEffect(() => {
     if (props.finishProcess) {
       const img = document.getElementById("picture");
-      FindKeypoints(img, setPose, pose, updatedJoints, props.setModelKeypoints);
+      FindKeypoints(
+        img,
+        setPose,
+        pose,
+        updatedJoints,
+        props.setModelKeypoints,
+        props.setIsModelReady
+      );
     }
   }, [props.finishProcess]);
 
