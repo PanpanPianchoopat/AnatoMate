@@ -9,7 +9,6 @@ export const PageContainer = styled.div`
   border: 25px solid ${COLORS.DARK_PURPLE};
   padding: 20px 5vw;
   font-family: ${DEFAULT_FONT};
-  overflow-y: auto;
   display: flex;
   justify-content: center;
 `;

@@ -268,10 +268,6 @@ function getComment(
     diff: `\nNOTE: Your prefer height is ${fullBody} ${current_ratio.unit} but the actual height from our calculation is ${actual_fullBody} ${current_ratio.unit}\nSo, your prefer ${part_name} length should be ${prefer_length} ${current_ratio.unit} (Current is ${actual_length} ${current_ratio.unit})`,
   };
 
-  console.log("HEAD_SIZE", headSize);
-  console.log("ACT_LEN", actual_length);
-  console.log("HEAD_RATIO", head_ratio);
-
   var thisSuffix = "";
   var suggestion_level = "";
   var add_on_suggestion = "";
@@ -299,7 +295,6 @@ function getComment(
   ];
 
   const cri_val = findCriLevel(actual_length, headSize * head_ratio);
-  console.log("CRI_VAL", cri_val);
   var this_comment = null;
   if (cri_val !== 0)
     this_comment = {
@@ -509,9 +504,6 @@ export default function TestModel(props) {
   // first time of height calucation
   const [firstHeight, setFirstHeight] = useState(true);
 
-  //keypoints: [name, x, y, confidence]
-  console.log("BONES", nodes.Ch36.skeleton.bones);
-
   if (keypoints) {
     rotateArm(1, keypoints, nodes); // left of the model
     rotateArm(-1, keypoints, nodes); // right of the model
@@ -519,7 +511,6 @@ export default function TestModel(props) {
 
   useEffect(() => {
     if (props.keypoints) {
-      console.log(props.keypoints);
       setModelKeypoints(props.keypoints);
 
       // Find character's height
@@ -527,15 +518,12 @@ export default function TestModel(props) {
       var current_ratio = { ratio: 1, unit: "unit" };
       if (firstHeight) {
         // If first time of height calculation, get height from model
-        console.log("FIRST");
         fullBody = getFullBodyLength(props.keypoints);
         setFirstHeight(false);
         props.setCharHeight(fullBody);
         current_ratio = { ratio: 1, unit: "unit" };
       } else {
         // Else get height from user input
-        console.log("NEXT");
-        // console.log("CUSTOM_H", props.customHeight.char_height);
 
         fullBody = props.customHeight.char_height;
         props.setCharHeight(fullBody);
@@ -544,8 +532,6 @@ export default function TestModel(props) {
           unit: props.customHeight.height_unit,
         };
       }
-      console.log("GET NEW COMMENT");
-      console.log("FULL_BODY", fullBody);
 
       // the ways height func and ratio should works
       // ex Original is 500px | prefer height is 100cm
@@ -556,18 +542,12 @@ export default function TestModel(props) {
       // but using original height to compare with that "head proportion"
       // the result shouldn't be the same. (Wrong almost all part)
 
-      console.log("BOTTOM_CUSTOMH", props.customHeight);
-
-      console.log("CURRENT_RATIO_BOTTOM", current_ratio);
-
       // Detect comment
       setComment(detectComment(props.keypoints, fullBody, current_ratio));
     }
   }, [props.keypoints, props.customHeight]);
 
   useEffect(() => {
-    console.log("COMMENT", comment);
-
     props.setSuggestions(comment);
   }, [comment]);
 
