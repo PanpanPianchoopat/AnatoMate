@@ -534,7 +534,11 @@ export default function TestModel(props) {
           <primitive object={nodes.mixamorig1Hips} position={[1, 0, 0]} />
           <skinnedMesh
             geometry={nodes.Ch36.geometry}
-            material={trans ? transparentMat : materials.Ch36_Body}
+            material={
+              props.modelSkin === "transparent"
+                ? transparentMat
+                : materials.Ch36_Body
+            }
             // material={materials.Ch36_Body}
             skeleton={nodes.Ch36.skeleton}
           />

@@ -1,5 +1,31 @@
 import styled from "styled-components";
 import { AiOutlineSmile } from "react-icons/ai";
+import COLORS from "../../../../../public/constants/colors";
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  border: 1px solid black;
+`;
+
+export const OptionButton = styled.div.attrs((props) => {
+  const bgColor = props.isActive ? COLORS.SALMON : "none";
+  return { bgColor };
+})`
+  display: flex;
+  border: 1px solid black;
+  background: ${(props) => props.bgColor};
+  width: 50%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  cursor: pointer;
+  &:hover {
+    background: black;
+    color: white;
+  }
+`;
 
 export const SuggestionsWrapper = styled.div`
   width: calc(50% - 255px);

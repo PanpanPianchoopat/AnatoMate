@@ -84,11 +84,10 @@ const PictureProcessing = ({ ...props }) => {
             customHeight={props.customHeight}
             setCustomHeight={props.setCustomHeight}
             setSuggestions={props.setSuggestions}
+            modelSkin={props.modelSkin}
           />
         )}
       </PictureContainer>
-      {/* <button onClick={handleNewUpload}>Reset Image</button>
-       */}
     </>
   );
 };
