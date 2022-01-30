@@ -24,7 +24,13 @@ const Model = ({ ...props }) => {
         <primitive object={new THREE.AxesHelper(10)} />
         <Suspense fallback={null}>
           <OrbitControls />
-          {props.keypoints && <TestModel keypoints={props.keypoints} />}
+          {props.keypoints && (
+            <TestModel
+              keypoints={props.keypoints}
+              customHeight={props.customHeight}
+              setCustomHeight={props.setCustomHeight}
+            />
+          )}
         </Suspense>
       </Canvas>
     </div>

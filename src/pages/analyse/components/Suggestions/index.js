@@ -45,11 +45,24 @@ const Suggestions = ({ ...props }) => {
   const { Panel } = Collapse;
   const [reset, setReset] = useState(false);
 
+  // disable reset keypoints to original position
+  const [disableReKey, isDisableReKey] = useState(true);
+  // disable re-upload new photo
+  const [disableRePic, isDisableRePic] = useState(false);
+
   useEffect(() => {
     if (props) {
       setReset(props.isReset);
     }
   }, [props]);
+
+  useEffect(() => {
+    document.getElementById("re-key-but").disabled = disableReKey;
+  }, [disableReKey]);
+
+  useEffect(() => {
+    document.getElementById("re-pic-but").disabled = disableRePic;
+  }, [disableRePic]);
 
   const popContent = (
     <div style={{ margin: "10px 5px 0 5px" }}>
@@ -66,11 +79,18 @@ const Suggestions = ({ ...props }) => {
 
   return (
     <SuggestionsWrapper>
-      <Button color="transparent" style={{ width: "100%", fontWeight: "bold" }}>
+      <Button
+        id="re-key-but"
+        color="transparent"
+        disable={disableReKey}
+        style={{ width: "100%", fontWeight: "bold" }}
+      >
         Reset Keypoint
       </Button>
       <Button
+        id="re-pic-but"
         color="transparent"
+        disable={disableRePic}
         style={{ width: "100%", fontWeight: "bold", margin: "15px 0" }}
         onClick={handleReset}
       >

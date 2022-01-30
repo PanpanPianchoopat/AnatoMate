@@ -3,8 +3,8 @@ import { Upload, Switch } from "antd";
 import { PictureContainer, UploadedImage } from "./styled";
 import ImgCrop from "antd-img-crop";
 
-import Pose from "../Pose";
-import Model from "../Model";
+import Pose from "./components/Pose";
+import Model from "./components/Model";
 
 const PictureProcessing = ({ ...props }) => {
   const [picture, setPicture] = useState(null);
@@ -78,7 +78,13 @@ const PictureProcessing = ({ ...props }) => {
             setModelKeypoints={setModelKeypoints}
           />
         )}
-        {props && props.showModel && <Model keypoints={modelKeypoints} />}
+        {props && props.showModel && (
+          <Model
+            keypoints={modelKeypoints}
+            customHeight={props.customHeight}
+            setCustomHeight={props.setCustomHeight}
+          />
+        )}
       </PictureContainer>
       {/* <button onClick={handleNewUpload}>Reset Image</button>
        */}

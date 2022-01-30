@@ -7,10 +7,9 @@ import { useGLTF, useAnimations } from "@react-three/drei";
 import {
   IMG_SIZE,
   HALF_CANVA_SIZE,
-} from "../../../../../../../public/constants/canva";
+} from "../../../../../../../../../public/constants/canva";
 import { BONE_NAMES, POINT_NAMES } from "../../constant";
 import * as THREE from "three";
-import COLORS from "../../../../../../../public/constants/colors";
 
 // Convert pixel to 3D canva coordinate
 function findPosition(position) {
@@ -264,7 +263,7 @@ function getComment(part_name, length, head_ratio, side, fullBody) {
     this_comment = {
       part: part_name,
       comment: `${side} ${part_name} ${thisSuffix}`,
-      critical_level: cri_val,
+      severity: cri_val,
     };
 
   return this_comment;
@@ -274,8 +273,7 @@ function pushArray(array, value) {
   if (value != null) array.push(value);
 }
 
-function detectComment(keypoints) {
-  const fullBody = getFullBodyLength(keypoints);
+function detectComment(keypoints, fullBody) {
   var all_comment = [];
 
   const left_arm_length = getArmLength(
@@ -410,6 +408,9 @@ export default function TestModel(props) {
   const [comment, setComment] = useState(null);
   const [trans, setTrans] = useState(true);
 
+  // first time of height calucation
+  const [firstHeight, setFirstHeight] = useState(true);
+
   //keypoints: [name, x, y, confidence]
   console.log("BONES", nodes.Ch36.skeleton.bones);
 
@@ -423,10 +424,24 @@ export default function TestModel(props) {
       console.log(props.keypoints);
       setModelKeypoints(props.keypoints);
 
+      // Find character's height
+      var fullBody = 0;
+      if (firstHeight) {
+        // If first time of height calculation, get height from model
+        console.log("FIRST");
+        fullBody = getFullBodyLength(props.keypoints);
+        setFirstHeight(false);
+        props.setCustomHeight(fullBody);
+      } else {
+        // Else get height from user input
+        console.log("NEXT");
+        fullBody = props.customHeight;
+      }
+      console.log("GET NEW COMMENT");
       // detect comment
-      setComment(detectComment(props.keypoints));
+      setComment(detectComment(props.keypoints, fullBody));
     }
-  }, [props.keypoints]);
+  }, [props.keypoints, props.customHeight]);
 
   useEffect(() => {
     console.log("COMMENT", comment);

@@ -8,22 +8,40 @@ import {
   ButtonGroup,
 } from "./styled";
 import Button from "../../../../components/Button";
+import COLORS from "../../../../../public/constants/colors";
 
-const HowTo = () => {
-  const [disabled, setDisabled] = useState(false);
+const HowTo = ({ ...props }) => {
+  const [disabled, setDisabled] = useState(true);
   const [unit, setUnit] = useState("unit");
-  const logChage = (val) => {
-    console.log(val);
-  };
 
   const [form] = Form.useForm();
+  const onFinish = (val) => {
+    console.log(val);
+    // const characterHeight =
+    //   props.customHeight *
+    //   (form.getFieldValue("ratio_unit") / form.getFieldValue("ratio_px"));
+    // console.log("CAL_H", characterHeight);
+
+    props.setCustomHeight(characterHeight);
+  };
+
+  useEffect(() => {
+    console.log("RECIEVE_HEGIHT", props.customHeight);
+    form.setFieldsValue({ char_height: Math.round(props.customHeight) });
+  }, [props.customHeight]);
+
   const resetForm = () => {
     form.resetFields();
   };
 
   useEffect(() => {
     document.getElementById("apply-button").disabled = disabled;
+    document.getElementById("reset-button").disabled = disabled;
   }, [disabled]);
+
+  useEffect(() => {
+    setDisabled(!props.showModel);
+  }, [props.showModel]);
 
   return (
     <SectionWrapper>
@@ -45,19 +63,23 @@ const HowTo = () => {
         size="medium"
         layout="vertical"
         initialValues={{
-          ratio_unit: 1,
-          ratio_px: 1,
+          char_height: 1,
+          // ratio_unit: 1,
+          // ratio_px: 1,
         }}
-        onFinish={logChage}
+        onFinish={onFinish}
         style={{ marginRight: "15px" }}
       >
         <Form.Item label="Character's height" style={{ marginBottom: "15px" }}>
           <Form.Item name="char_height" noStyle>
             <InputNumber
-              min={1}
+              disabled={disabled}
+              defaultValue={100}
               placeholder="height"
               style={{
-                border: "2px solid black",
+                border: `2px solid ${
+                  disabled ? COLORS.GREY : COLORS.DEFALT_BLACK
+                }`,
                 display: "inline-block",
                 width: "calc(50% - 8px)",
                 marginRight: "8px",
@@ -66,10 +88,13 @@ const HowTo = () => {
           </Form.Item>
           <Form.Item name="height_unit" noStyle>
             <Select
+              disabled={disabled}
               placeholder="unit"
               onChange={(unit) => setUnit(unit)}
               style={{
-                border: "2px solid black",
+                border: `2px solid ${
+                  disabled ? COLORS.GREY : COLORS.DEFALT_BLACK
+                }`,
                 display: "inline-block",
                 width: "calc(50%)",
               }}
@@ -89,13 +114,16 @@ const HowTo = () => {
             </Select>
           </Form.Item>
         </Form.Item>
-        <Form.Item label={`Ratio ${unit} : px`}>
+        {/* <Form.Item label={`Ratio ${unit} : px`}>
           <Form.Item name="ratio_unit" noStyle>
             <InputNumber
               min={1}
+              disabled={disabled}
               placeholder="unit"
               style={{
-                border: "2px solid black",
+                border: `2px solid ${
+                  disabled ? COLORS.GREY : COLORS.DEFALT_BLACK
+                }`,
                 display: "inline-block",
                 width: "calc(50% - 4px)",
               }}
@@ -104,27 +132,36 @@ const HowTo = () => {
           <Form.Item name="ratio_px" noStyle>
             <InputNumber
               min={1}
+              disabled={disabled}
               placeholder="px"
               style={{
-                border: "2px solid black",
+                border: `2px solid ${
+                  disabled ? COLORS.GREY : COLORS.DEFALT_BLACK
+                }`,
                 display: "inline-block",
                 marginLeft: "8px",
                 width: "calc(50% - 4px)",
               }}
             />
           </Form.Item>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item>
           <ButtonGroup>
-            <Button color="transparent" type="reset" onClick={resetForm}>
+            <Button
+              type="reset"
+              id="reset-button"
+              color="transparent"
+              disable={disabled}
+              onClick={resetForm}
+            >
               Reset
             </Button>
             <Button
               type="submit"
               id="apply-button"
+              disable={disabled}
               style={{
                 marginLeft: "10px",
-                cursor: disabled ? "not-allowed" : "pointer",
               }}
             >
               Apply
