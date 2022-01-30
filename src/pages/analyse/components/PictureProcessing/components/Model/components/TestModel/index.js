@@ -245,19 +245,20 @@ function findCriLevel(current_length, good_length) {
 // length -> pixel
 // head_ratio -> correct ratio that suppose to be for this part
 // side -> string
-function getComment(part_name, length, head_ratio, side, fullBody) {
+function getComment(part_name, length, head_ratio, side, fullBody, origin_fullBody) {
   const headSize = fullBody * 0.125; // in 8 proportion ration head size = 12.5% of full body
+  const new_length = fullBody * (length/origin_fullBody);
   const static_suffix = {
     long: "is longer than usual.",
     short: "is shorter than usual.",
   };
   var thisSuffix = "";
 
-  if (length < headSize * head_ratio) thisSuffix = static_suffix.short;
+  if (new_length < headSize * head_ratio) thisSuffix = static_suffix.short;
 
-  if (length > headSize * head_ratio) thisSuffix = static_suffix.long;
+  if (new_length > headSize * head_ratio) thisSuffix = static_suffix.long;
 
-  const cri_val = findCriLevel(length, headSize * head_ratio);
+  const cri_val = findCriLevel(new_length, headSize * head_ratio);
   var this_comment = null;
   if (cri_val !== 0)
     this_comment = {
@@ -275,6 +276,7 @@ function pushArray(array, value) {
 
 function detectComment(keypoints, fullBody) {
   var all_comment = [];
+  const origin_fullBody = getFullBodyLength(keypoints);
 
   const left_arm_length = getArmLength(
     keypoints[POINT_NAMES.L_SHOULDER],
@@ -300,11 +302,11 @@ function detectComment(keypoints, fullBody) {
   // check arm
   pushArray(
     all_comment,
-    getComment("arm", left_arm_length.armlength, 2.5, "Left", fullBody)
+    getComment("arm", left_arm_length.armlength, 2.5, "Left", fullBody, origin_fullBody)
   );
   pushArray(
     all_comment,
-    getComment("arm", right_arm_length.armlength, 2.5, "Right", fullBody)
+    getComment("arm", right_arm_length.armlength, 2.5, "Right", fullBody, origin_fullBody)
   );
 
   pushArray(
@@ -314,7 +316,8 @@ function detectComment(keypoints, fullBody) {
       left_arm_length.upperarmlength,
       1.5,
       "Left",
-      fullBody
+      fullBody,
+      origin_fullBody
     )
   );
   pushArray(
@@ -324,13 +327,14 @@ function detectComment(keypoints, fullBody) {
       right_arm_length.upperarmlength,
       1.5,
       "Right",
-      fullBody
+      fullBody,
+      origin_fullBody
     )
   );
 
   pushArray(
     all_comment,
-    getComment("lower arm", left_arm_length.lowerarmlength, 1, "Left", fullBody)
+    getComment("lower arm", left_arm_length.lowerarmlength, 1, "Left", fullBody, origin_fullBody)
   );
   pushArray(
     all_comment,
@@ -339,18 +343,18 @@ function detectComment(keypoints, fullBody) {
       right_arm_length.lowerarmlength,
       1,
       "Right",
-      fullBody
+      fullBody, origin_fullBody
     )
   );
 
   // check leg
   pushArray(
     all_comment,
-    getComment("leg", left_leg_length.leglength, 3.5, "Left", fullBody)
+    getComment("leg", left_leg_length.leglength, 3.5, "Left", fullBody, origin_fullBody)
   );
   pushArray(
     all_comment,
-    getComment("leg", right_leg_length.leglength, 3.5, "Right", fullBody)
+    getComment("leg", right_leg_length.leglength, 3.5, "Right", fullBody, origin_fullBody)
   );
 
   pushArray(
@@ -360,7 +364,8 @@ function detectComment(keypoints, fullBody) {
       left_leg_length.upperleglength,
       1.8,
       "Left",
-      fullBody
+      fullBody,
+      origin_fullBody
     )
   );
   pushArray(
@@ -370,7 +375,8 @@ function detectComment(keypoints, fullBody) {
       right_leg_length.upperleglength,
       1.8,
       "Right",
-      fullBody
+      fullBody,
+      origin_fullBody
     )
   );
 
@@ -381,7 +387,8 @@ function detectComment(keypoints, fullBody) {
       left_leg_length.lowerleglength,
       1.7,
       "Left",
-      fullBody
+      fullBody,
+      origin_fullBody
     )
   );
   pushArray(
@@ -391,7 +398,8 @@ function detectComment(keypoints, fullBody) {
       right_leg_length.lowerleglength,
       1.7,
       "Right",
-      fullBody
+      fullBody,
+      origin_fullBody
     )
   );
 
