@@ -251,35 +251,55 @@ function getComment(
   head_ratio,
   side,
   fullBody,
-  origin_fullBody
+  origin_fullBody,
+  current_ratio // this is dict {ratio: , unit: }
 ) {
-  const headSize = fullBody * 0.125; // in 8 proportion ration head size = 12.5% of full body
-  const new_length = fullBody * (length / origin_fullBody);
+  // in 8 proportion ration head size = 12.5% of full body
+  const headSize = fullBody * 0.125; // This full body is prefer full body from user
+  const actual_fullBody = origin_fullBody * current_ratio.ratio
+  const actual_length = length * current_ratio.ratio;
+  const prefer_length = fullBody * (length / origin_fullBody);
   const static_suffix = {
     long: "longer",
     short: "shorter",
   };
+  const length_comment = {
+    same: "",
+    diff: `<br/>NOTE: Your prefer height is ${fullBody} ${current_ratio.unit} but the actual height from our calculation is ${actual_fullBody} ${current_ratio.unit}
+    <br/>So, your prefer ${part_name} length should be ${prefer_length} ${current_ratio.unit} (Current is ${actual_length} ${current_ratio.unit})`
+  }
 
   var thisSuffix = "";
   var suggestion_level = "";
+  var add_on_suggestion = "";
 
-  if (new_length < headSize * head_ratio) {
+  if (actual_length < headSize * head_ratio) {
     thisSuffix = static_suffix.short;
     suggestion_level = static_suffix.long;
   }
 
-  if (new_length > headSize * head_ratio) {
+  if (actual_length > headSize * head_ratio) {
     thisSuffix = static_suffix.long;
     suggestion_level = static_suffix.short;
   }
 
+  if (fullBody <= actual_fullBody + 1 && fullBody >= actual_fullBody- 1)
+  {
+    add_on_suggestion = length_comment.same;
+  }
+  else
+  {
+    add_on_suggestion = length_comment.diff;
+  }
+
+
   const suggestion = [
     "This is not a big deal, you can either adjust your drawings or just ignore this comment :)",
-    `We suggest you to adjust the ${part_name} to be a bit ${suggestion_level}`,
-    `We suggest you to adjust the ${part_name} to be ${suggestion_level}`,
+    `We suggest you to adjust the ${part_name} to be a bit ${suggestion_level}${add_on_suggestion}`,
+    `We suggest you to adjust the ${part_name} to be ${suggestion_level}${add_on_suggestion}`,
   ];
 
-  const cri_val = findCriLevel(new_length, headSize * head_ratio);
+  const cri_val = findCriLevel(actual_length, headSize * head_ratio);
   var this_comment = null;
   if (cri_val !== 0)
     this_comment = {
@@ -295,7 +315,8 @@ function pushArray(array, value) {
   if (value != null) array.push(value);
 }
 
-function detectComment(keypoints, fullBody) {
+// Detect Comment
+function detectComment(keypoints, fullBody, current_ratio) {
   var all_comment = [];
   const origin_fullBody = getFullBodyLength(keypoints);
 
@@ -329,7 +350,8 @@ function detectComment(keypoints, fullBody) {
       2.5,
       "Left",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
   pushArray(
@@ -340,7 +362,8 @@ function detectComment(keypoints, fullBody) {
       2.5,
       "Right",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
 
@@ -352,7 +375,8 @@ function detectComment(keypoints, fullBody) {
       1.5,
       "Left",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
   pushArray(
@@ -363,7 +387,8 @@ function detectComment(keypoints, fullBody) {
       1.5,
       "Right",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
 
@@ -375,7 +400,8 @@ function detectComment(keypoints, fullBody) {
       1,
       "Left",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
   pushArray(
@@ -386,7 +412,8 @@ function detectComment(keypoints, fullBody) {
       1,
       "Right",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
 
@@ -399,7 +426,8 @@ function detectComment(keypoints, fullBody) {
       3.5,
       "Left",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
   pushArray(
@@ -410,7 +438,8 @@ function detectComment(keypoints, fullBody) {
       3.5,
       "Right",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
 
@@ -422,7 +451,8 @@ function detectComment(keypoints, fullBody) {
       1.8,
       "Left",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
   pushArray(
@@ -433,7 +463,8 @@ function detectComment(keypoints, fullBody) {
       1.8,
       "Right",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
 
@@ -445,7 +476,8 @@ function detectComment(keypoints, fullBody) {
       1.7,
       "Left",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
   pushArray(
@@ -456,7 +488,8 @@ function detectComment(keypoints, fullBody) {
       1.7,
       "Right",
       fullBody,
-      origin_fullBody
+      origin_fullBody,
+      current_ratio
     )
   );
 
@@ -500,12 +533,27 @@ export default function TestModel(props) {
       } else {
         // Else get height from user input
         console.log("NEXT");
-        fullBody = props.customHeight;
+        fullBody = props.customHeight.char_height;
         props.setCustomHeight(fullBody);
       }
       console.log("GET NEW COMMENT");
-      // detect comment
-      setComment(detectComment(props.keypoints, fullBody));
+
+      // the ways height func and ratio should works
+      // ex Original is 500px | prefer height is 100cm
+      // and the ratio is 2 cm equal 5 px
+      // if we calculate original height with ratio (500 * 2/5)
+      // the result is 200 cm which is not the same as prefer height.
+      // If we calculate "head proportion" with prefer height
+      // but using original height to compare with that "head proportion"
+      // the result shouldn't be the same. (Wrong almost all part)
+
+      var current_ratio = {
+        ratio: props.customHeight.ratio_unit / props.customHeight.ratio_px,
+        unit: props.customHeight.height_unit
+      }
+
+      // Detect comment
+      setComment(detectComment(props.keypoints, fullBody, current_ratio));
     }
   }, [props.keypoints, props.customHeight]);
 
