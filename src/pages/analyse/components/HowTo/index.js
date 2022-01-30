@@ -22,7 +22,7 @@ const HowTo = ({ ...props }) => {
     //   (form.getFieldValue("ratio_unit") / form.getFieldValue("ratio_px"));
     // console.log("CAL_H", characterHeight);
 
-    props.setCustomHeight(characterHeight);
+    props.setCustomHeight(form.getFieldValue("char_height"));
   };
 
   useEffect(() => {
