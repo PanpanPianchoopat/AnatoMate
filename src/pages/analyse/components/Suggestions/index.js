@@ -153,6 +153,7 @@ const Suggestions = ({ ...props }) => {
                     style={{
                       fontSize: "0.8em",
                       overflow: "hidden",
+                      whiteSpace: "pre-wrap",
                     }}
                   >
                     {comment.comments}

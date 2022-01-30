@@ -15,8 +15,12 @@ const Analyse = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [modelSkin, setModelSkin] = useState("transparent");
 
+  // preferences of height
+  const [customHeight, setCustomHeight] = useState({});
+
   // character's height
-  const [customHeight, setCustomHeight] = useState(0);
+  const [charHeight, setCharHeight] = useState(0);
+
   useEffect(() => {
     console.log("SUGGESTION", suggestions);
   }, [suggestions]);
@@ -36,12 +40,13 @@ const Analyse = () => {
           <HowTo
             customHeight={customHeight}
             setCustomHeight={setCustomHeight}
+            charHeight={charHeight}
             showModel={showModel}
             isReset={isReset}
           />
           <PictureProcessing
             customHeight={customHeight}
-            setCustomHeight={setCustomHeight}
+            setCharHeight={setCharHeight}
             showModel={showModel}
             modelSkin={modelSkin}
             isReset={isReset}

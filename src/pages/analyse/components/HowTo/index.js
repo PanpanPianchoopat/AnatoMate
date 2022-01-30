@@ -28,9 +28,9 @@ const HowTo = ({ ...props }) => {
   };
 
   useEffect(() => {
-    console.log("RECIEVE_HEGIHT", props.customHeight);
-    form.setFieldsValue({ char_height: Math.round(props.customHeight) });
-  }, [props.customHeight]);
+    console.log("RECIEVE_HEGIHT", props.charHeight);
+    form.setFieldsValue({ char_height: Math.round(props.charHeight) });
+  }, [props.charHeight]);
 
   const resetForm = () => {
     form.resetFields();
@@ -91,7 +91,11 @@ const HowTo = ({ ...props }) => {
               }}
             />
           </Form.Item>
-          <Form.Item name="height_unit" noStyle>
+          <Form.Item
+            name="height_unit"
+            rules={[{ required: "true", message: "Please enter height unit" }]}
+            noStyle
+          >
             <Select
               disabled={disabled}
               placeholder="unit"

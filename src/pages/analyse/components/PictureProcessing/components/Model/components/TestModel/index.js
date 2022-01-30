@@ -256,7 +256,7 @@ function getComment(
 ) {
   // in 8 proportion ration head size = 12.5% of full body
   const headSize = fullBody * 0.125; // This full body is prefer full body from user
-  const actual_fullBody = origin_fullBody * current_ratio.ratio
+  const actual_fullBody = origin_fullBody * current_ratio.ratio;
   const actual_length = length * current_ratio.ratio;
   const prefer_length = fullBody * (length / origin_fullBody);
   const static_suffix = {
@@ -265,9 +265,8 @@ function getComment(
   };
   const length_comment = {
     same: "",
-    diff: `<br/>NOTE: Your prefer height is ${fullBody} ${current_ratio.unit} but the actual height from our calculation is ${actual_fullBody} ${current_ratio.unit}
-    <br/>So, your prefer ${part_name} length should be ${prefer_length} ${current_ratio.unit} (Current is ${actual_length} ${current_ratio.unit})`
-  }
+    diff: `\nNOTE: Your prefer height is ${fullBody} ${current_ratio.unit} but the actual height from our calculation is ${actual_fullBody} ${current_ratio.unit}\nSo, your prefer ${part_name} length should be ${prefer_length} ${current_ratio.unit} (Current is ${actual_length} ${current_ratio.unit})`,
+  };
 
   var thisSuffix = "";
   var suggestion_level = "";
@@ -283,15 +282,11 @@ function getComment(
     suggestion_level = static_suffix.short;
   }
 
-  if (fullBody <= actual_fullBody + 1 && fullBody >= actual_fullBody- 1)
-  {
+  if (fullBody <= actual_fullBody + 1 && fullBody >= actual_fullBody - 1) {
     add_on_suggestion = length_comment.same;
-  }
-  else
-  {
+  } else {
     add_on_suggestion = length_comment.diff;
   }
-
 
   const suggestion = [
     "This is not a big deal, you can either adjust your drawings or just ignore this comment :)",
@@ -529,12 +524,14 @@ export default function TestModel(props) {
         console.log("FIRST");
         fullBody = getFullBodyLength(props.keypoints);
         setFirstHeight(false);
-        props.setCustomHeight(fullBody);
+        props.setCharHeight(fullBody);
       } else {
         // Else get height from user input
         console.log("NEXT");
+        // console.log("CUSTOM_H", props.customHeight.char_height);
+
         fullBody = props.customHeight.char_height;
-        props.setCustomHeight(fullBody);
+        props.setCharHeight(fullBody);
       }
       console.log("GET NEW COMMENT");
 
@@ -549,8 +546,8 @@ export default function TestModel(props) {
 
       var current_ratio = {
         ratio: props.customHeight.ratio_unit / props.customHeight.ratio_px,
-        unit: props.customHeight.height_unit
-      }
+        unit: props.customHeight.height_unit,
+      };
 
       // Detect comment
       setComment(detectComment(props.keypoints, fullBody, current_ratio));

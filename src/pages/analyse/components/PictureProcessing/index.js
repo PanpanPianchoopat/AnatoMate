@@ -85,6 +85,7 @@ const PictureProcessing = ({ ...props }) => {
             setCustomHeight={props.setCustomHeight}
             setSuggestions={props.setSuggestions}
             modelSkin={props.modelSkin}
+            setCharHeight={props.setCharHeight}
           />
         )}
       </PictureContainer>

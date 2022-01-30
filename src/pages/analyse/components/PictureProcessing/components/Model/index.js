@@ -29,6 +29,7 @@ const Model = ({ ...props }) => {
               keypoints={props.keypoints}
               customHeight={props.customHeight}
               setCustomHeight={props.setCustomHeight}
+              setCharHeight={props.setCharHeight}
               setSuggestions={props.setSuggestions}
               modelSkin={props.modelSkin}
             />
