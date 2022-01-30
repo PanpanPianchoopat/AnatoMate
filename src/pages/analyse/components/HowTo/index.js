@@ -22,7 +22,9 @@ const HowTo = ({ ...props }) => {
     //   (form.getFieldValue("ratio_unit") / form.getFieldValue("ratio_px"));
     // console.log("CAL_H", characterHeight);
 
-    props.setCustomHeight(form.getFieldValue("char_height"));
+    // props.setCustomHeight(form.getFieldValue("char_height"));
+    console.log(val);
+    props.setCustomHeight(val);
   };
 
   useEffect(() => {
@@ -64,8 +66,8 @@ const HowTo = ({ ...props }) => {
         layout="vertical"
         initialValues={{
           char_height: 1,
-          // ratio_unit: 1,
-          // ratio_px: 1,
+          ratio_unit: 1,
+          ratio_px: 1,
         }}
         onFinish={onFinish}
         style={{ marginRight: "15px" }}
@@ -114,7 +116,7 @@ const HowTo = ({ ...props }) => {
             </Select>
           </Form.Item>
         </Form.Item>
-        {/* <Form.Item label={`Ratio ${unit} : px`}>
+        <Form.Item label={`Ratio ${unit} : px`}>
           <Form.Item name="ratio_unit" noStyle>
             <InputNumber
               min={1}
@@ -144,7 +146,7 @@ const HowTo = ({ ...props }) => {
               }}
             />
           </Form.Item>
-        </Form.Item> */}
+        </Form.Item>
         <Form.Item>
           <ButtonGroup>
             <Button

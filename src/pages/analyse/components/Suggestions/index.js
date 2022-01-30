@@ -1,24 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Collapse, Col, Tooltip } from "antd";
+import { Switch, Collapse, Radio, Tooltip } from "antd";
 import { SuggestionsWrapper, NoComment, Smiley } from "./styled";
 import COLORS from "../../../../../public/constants/colors";
 import Button from "../../../../components/Button";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
-
-const MOCK_COMMENTS = [
-  { header: "Test3", comments: "Tpp short", severity: 2 },
-  {
-    header:
-      "Puff the magic dragon lived by the sea And frolicked in the autumn mist in a land called Honah Lee Little Jackie Paper loved that rascal Puff And brought him strings and sealing wax and other fancy stuff",
-    comments:
-      "ในโลกที่มี ความวกวนในโลกที่ทุกคนต้องดิ้นรนที่สับสน ร้อนรนจนใจ นั้นแสนเหนื่อยในโลกที่ความทุกข์ท้อใจได้เดินผ่านเข้ามาเรื่อยๆจนบางครั้งไม่รู้จะข้ามไปเช่นไร",
-    severity: 3,
-  },
-  { header: "Test2", comments: "Tpp long", severity: 2 },
-  { header: "Test3", comments: "Tpp short", severity: 1 },
-  { header: "Test3", comments: "Tpp short", severity: 1 },
-  { header: "Test3", comments: "Tpp short", severity: 1 },
-];
 
 function getTagColor(severity) {
   if (severity == 3) {
@@ -57,6 +42,10 @@ const Suggestions = ({ ...props }) => {
   }, [props]);
 
   useEffect(() => {
+    console.log("REC_SUGG", props.suggestions);
+  }, [props.suggestions]);
+
+  useEffect(() => {
     document.getElementById("re-key-but").disabled = disableReKey;
   }, [disableReKey]);
 
@@ -74,9 +63,13 @@ const Suggestions = ({ ...props }) => {
 
   function handleReset() {
     setReset(!reset);
-    props.setIsReset(!reset);
+    props.setIsReset(true);
   }
-
+  const [modelSkin, setModelSkin] = useState("transparent");
+  const skinOption = [
+    { label: "transparent", value: "transparent" },
+    { label: "opaque", value: "opaque" },
+  ];
   return (
     <SuggestionsWrapper>
       <Button
@@ -105,7 +98,7 @@ const Suggestions = ({ ...props }) => {
         </Tooltip>
       </div>
 
-      <div>
+      <div style={{ background: "pink" }}>
         Comparison
         <Switch
           checked={showModel}
@@ -115,9 +108,16 @@ const Suggestions = ({ ...props }) => {
             background: showModel ? COLORS.DARK_PURPLE : "#dddddd",
           }}
         />
+        <div>
+          {skinOption.map((option, idx) => (
+            <div key={idx} style={{ border: "2px solid black" }}>
+              {option.label}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {comments ? (
+      {props && props.suggestions ? (
         <div
           style={{
             height: "320px",
@@ -126,30 +126,30 @@ const Suggestions = ({ ...props }) => {
           }}
         >
           <Collapse accordion expandIcon={() => null} bordered={false}>
-            {MOCK_COMMENTS.sort((a, b) =>
-              a.severity > b.severity ? -1 : 1
-            ).map((comment, idx) => (
-              <Panel
-                key={idx}
-                header={comment.header}
-                style={{
-                  border: "2px solid black",
-                  marginBottom: "15px",
-                  background: `linear-gradient(90deg, ${getTagColor(
-                    comment.severity
-                  )} 10px, white 0%)`,
-                }}
-              >
-                <p
+            {props.suggestions
+              .sort((a, b) => (a.severity > b.severity ? -1 : 1))
+              .map((comment, idx) => (
+                <Panel
+                  key={idx}
+                  header={comment.header}
                   style={{
-                    fontSize: "0.8em",
-                    overflow: "hidden",
+                    border: "2px solid black",
+                    marginBottom: "15px",
+                    background: `linear-gradient(90deg, ${getTagColor(
+                      comment.severity
+                    )} 10px, white 0%)`,
                   }}
                 >
-                  {comment.comments}
-                </p>
-              </Panel>
-            ))}
+                  <p
+                    style={{
+                      fontSize: "0.8em",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {comment.comments}
+                  </p>
+                </Panel>
+              ))}
           </Collapse>
         </div>
       ) : (

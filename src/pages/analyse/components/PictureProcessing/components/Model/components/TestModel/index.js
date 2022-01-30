@@ -245,25 +245,46 @@ function findCriLevel(current_length, good_length) {
 // length -> pixel
 // head_ratio -> correct ratio that suppose to be for this part
 // side -> string
-function getComment(part_name, length, head_ratio, side, fullBody, origin_fullBody) {
+function getComment(
+  part_name,
+  length,
+  head_ratio,
+  side,
+  fullBody,
+  origin_fullBody
+) {
   const headSize = fullBody * 0.125; // in 8 proportion ration head size = 12.5% of full body
-  const new_length = fullBody * (length/origin_fullBody);
+  const new_length = fullBody * (length / origin_fullBody);
   const static_suffix = {
-    long: "is longer than usual.",
-    short: "is shorter than usual.",
+    long: "longer",
+    short: "shorter",
   };
+
   var thisSuffix = "";
+  var suggestion_level = "";
 
-  if (new_length < headSize * head_ratio) thisSuffix = static_suffix.short;
+  if (new_length < headSize * head_ratio) {
+    thisSuffix = static_suffix.short;
+    suggestion_level = static_suffix.long;
+  }
 
-  if (new_length > headSize * head_ratio) thisSuffix = static_suffix.long;
+  if (new_length > headSize * head_ratio) {
+    thisSuffix = static_suffix.long;
+    suggestion_level = static_suffix.short;
+  }
+
+  const suggestion = [
+    "This is not a big deal, you can either adjust your drawings or just ignore this comment :)",
+    `We suggest you to adjust the ${part_name} to be a bit ${suggestion_level}`,
+    `We suggest you to adjust the ${part_name} to be ${suggestion_level}`,
+  ];
 
   const cri_val = findCriLevel(new_length, headSize * head_ratio);
   var this_comment = null;
   if (cri_val !== 0)
     this_comment = {
-      part: part_name,
-      comment: `${side} ${part_name} ${thisSuffix}`,
+      header: `${side} ${part_name} is ${thisSuffix} than usual`,
+      comments: suggestion[cri_val - 1],
       severity: cri_val,
     };
 
@@ -302,11 +323,25 @@ function detectComment(keypoints, fullBody) {
   // check arm
   pushArray(
     all_comment,
-    getComment("arm", left_arm_length.armlength, 2.5, "Left", fullBody, origin_fullBody)
+    getComment(
+      "arm",
+      left_arm_length.armlength,
+      2.5,
+      "Left",
+      fullBody,
+      origin_fullBody
+    )
   );
   pushArray(
     all_comment,
-    getComment("arm", right_arm_length.armlength, 2.5, "Right", fullBody, origin_fullBody)
+    getComment(
+      "arm",
+      right_arm_length.armlength,
+      2.5,
+      "Right",
+      fullBody,
+      origin_fullBody
+    )
   );
 
   pushArray(
@@ -334,7 +369,14 @@ function detectComment(keypoints, fullBody) {
 
   pushArray(
     all_comment,
-    getComment("lower arm", left_arm_length.lowerarmlength, 1, "Left", fullBody, origin_fullBody)
+    getComment(
+      "lower arm",
+      left_arm_length.lowerarmlength,
+      1,
+      "Left",
+      fullBody,
+      origin_fullBody
+    )
   );
   pushArray(
     all_comment,
@@ -343,18 +385,33 @@ function detectComment(keypoints, fullBody) {
       right_arm_length.lowerarmlength,
       1,
       "Right",
-      fullBody, origin_fullBody
+      fullBody,
+      origin_fullBody
     )
   );
 
   // check leg
   pushArray(
     all_comment,
-    getComment("leg", left_leg_length.leglength, 3.5, "Left", fullBody, origin_fullBody)
+    getComment(
+      "leg",
+      left_leg_length.leglength,
+      3.5,
+      "Left",
+      fullBody,
+      origin_fullBody
+    )
   );
   pushArray(
     all_comment,
-    getComment("leg", right_leg_length.leglength, 3.5, "Right", fullBody, origin_fullBody)
+    getComment(
+      "leg",
+      right_leg_length.leglength,
+      3.5,
+      "Right",
+      fullBody,
+      origin_fullBody
+    )
   );
 
   pushArray(
@@ -444,6 +501,7 @@ export default function TestModel(props) {
         // Else get height from user input
         console.log("NEXT");
         fullBody = props.customHeight;
+        props.setCustomHeight(fullBody);
       }
       console.log("GET NEW COMMENT");
       // detect comment
@@ -453,6 +511,8 @@ export default function TestModel(props) {
 
   useEffect(() => {
     console.log("COMMENT", comment);
+
+    props.setSuggestions(comment);
   }, [comment]);
 
   const transparentMat = new THREE.MeshStandardMaterial({

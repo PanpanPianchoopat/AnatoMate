@@ -83,6 +83,7 @@ const PictureProcessing = ({ ...props }) => {
             keypoints={modelKeypoints}
             customHeight={props.customHeight}
             setCustomHeight={props.setCustomHeight}
+            setSuggestions={props.setSuggestions}
           />
         )}
       </PictureContainer>

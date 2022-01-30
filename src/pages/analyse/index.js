@@ -10,15 +10,22 @@ import HowTo from "./components/HowTo";
 import Suggestions from "./components/Suggestions";
 
 const Analyse = () => {
-  const [isModelReady, setIsModelReady] = useState(false);
   const [showModel, setShowModel] = useState(false);
   const [isReset, setIsReset] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
   // character's height
   const [customHeight, setCustomHeight] = useState(0);
   useEffect(() => {
-    console.log("CUSTOM_HEIGHT", customHeight);
-  }, [customHeight]);
+    console.log("SUGGESTION", suggestions);
+  }, [suggestions]);
+
+  useEffect(() => {
+    if (isReset) {
+      setSuggestions([]);
+      setShowModel(false);
+    }
+  }, [isReset]);
 
   return (
     <PageContainer>
@@ -36,14 +43,14 @@ const Analyse = () => {
             showModel={showModel}
             isReset={isReset}
             setIsReset={setIsReset}
+            setSuggestions={setSuggestions}
           />
           <Suggestions
             showModel={showModel}
             setShowModel={setShowModel}
             isReset={isReset}
             setIsReset={setIsReset}
-            // isModelReady={isModelReady}
-            // setIsModelReady={setIsModelReady}
+            suggestions={suggestions}
           />
         </SectionsContainer>
       </ContentWrapper>
