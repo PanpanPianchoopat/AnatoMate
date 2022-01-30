@@ -1,14 +1,9 @@
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import TestModel from "./components/TestModel";
-import * as THREE from "three";
 
 const Model = ({ ...props }) => {
-  useEffect(() => {
-    console.log("PASSING", props.keypoints);
-  }, [props.keypoints]);
-
   return (
     <div
       style={{
@@ -21,14 +16,12 @@ const Model = ({ ...props }) => {
     >
       <Canvas colorManagement camera={{ position: [0, 0, 3.5], fov: 30 }}>
         <ambientLight intensity={1} />
-        <primitive object={new THREE.AxesHelper(10)} />
         <Suspense fallback={null}>
           <OrbitControls />
           {props.keypoints && (
             <TestModel
               keypoints={props.keypoints}
               customHeight={props.customHeight}
-              setCustomHeight={props.setCustomHeight}
               setCharHeight={props.setCharHeight}
               setSuggestions={props.setSuggestions}
               modelSkin={props.modelSkin}

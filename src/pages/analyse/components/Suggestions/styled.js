@@ -2,6 +2,15 @@ import styled from "styled-components";
 import { AiOutlineSmile } from "react-icons/ai";
 import COLORS from "../../../../../public/constants/colors";
 
+export const SuggestionsWrapper = styled.div`
+  width: calc(50% - 255px);
+  height: 100%;
+  padding-left: 20px;
+  font-size: 1em;
+  display: flex;
+  flex-direction: column;
+`;
+
 export const ButtonGroup = styled.div`
   display: flex;
   border: 1px solid black;
@@ -27,13 +36,10 @@ export const OptionButton = styled.div.attrs((props) => {
   }
 `;
 
-export const SuggestionsWrapper = styled.div`
-  width: calc(50% - 255px);
-  height: 100%;
-  padding-left: 20px;
-  font-size: 1em;
-  display: flex;
-  flex-direction: column;
+export const Detail = styled.p`
+  font-size: 0.8em;
+  overflow: hidden;
+  white-space: pre-wrap;
 `;
 
 export const NoComment = styled.div`

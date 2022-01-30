@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Switch, Collapse, Radio, Tooltip } from "antd";
 import {
   SuggestionsWrapper,
+  Detail,
   NoComment,
   Smiley,
   ButtonGroup,
@@ -92,6 +93,7 @@ const Suggestions = ({ ...props }) => {
       >
         Reupload Photo
       </Button>
+
       <div style={{ display: "flex", alignItems: "center", margin: "5px 0" }}>
         <h2 style={{ margin: "0" }}>Suggestions</h2>
         <Tooltip title={popContent} color="#404040">
@@ -149,15 +151,7 @@ const Suggestions = ({ ...props }) => {
                     )} 10px, white 0%)`,
                   }}
                 >
-                  <p
-                    style={{
-                      fontSize: "0.8em",
-                      overflow: "hidden",
-                      whiteSpace: "pre-wrap",
-                    }}
-                  >
-                    {comment.comments}
-                  </p>
+                  <Detail>{comment.comments}</Detail>
                 </Panel>
               ))}
           </Collapse>

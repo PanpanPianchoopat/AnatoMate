@@ -268,6 +268,10 @@ function getComment(
     diff: `\nNOTE: Your prefer height is ${fullBody} ${current_ratio.unit} but the actual height from our calculation is ${actual_fullBody} ${current_ratio.unit}\nSo, your prefer ${part_name} length should be ${prefer_length} ${current_ratio.unit} (Current is ${actual_length} ${current_ratio.unit})`,
   };
 
+  console.log("HEAD_SIZE", headSize);
+  console.log("ACT_LEN", actual_length);
+  console.log("HEAD_RATIO", head_ratio);
+
   var thisSuffix = "";
   var suggestion_level = "";
   var add_on_suggestion = "";
@@ -295,6 +299,7 @@ function getComment(
   ];
 
   const cri_val = findCriLevel(actual_length, headSize * head_ratio);
+  console.log("CRI_VAL", cri_val);
   var this_comment = null;
   if (cri_val !== 0)
     this_comment = {
@@ -519,12 +524,14 @@ export default function TestModel(props) {
 
       // Find character's height
       var fullBody = 0;
+      var current_ratio = { ratio: 1, unit: "unit" };
       if (firstHeight) {
         // If first time of height calculation, get height from model
         console.log("FIRST");
         fullBody = getFullBodyLength(props.keypoints);
         setFirstHeight(false);
         props.setCharHeight(fullBody);
+        current_ratio = { ratio: 1, unit: "unit" };
       } else {
         // Else get height from user input
         console.log("NEXT");
@@ -532,8 +539,13 @@ export default function TestModel(props) {
 
         fullBody = props.customHeight.char_height;
         props.setCharHeight(fullBody);
+        current_ratio = {
+          ratio: props.customHeight.ratio_unit / props.customHeight.ratio_px,
+          unit: props.customHeight.height_unit,
+        };
       }
       console.log("GET NEW COMMENT");
+      console.log("FULL_BODY", fullBody);
 
       // the ways height func and ratio should works
       // ex Original is 500px | prefer height is 100cm
@@ -544,10 +556,9 @@ export default function TestModel(props) {
       // but using original height to compare with that "head proportion"
       // the result shouldn't be the same. (Wrong almost all part)
 
-      var current_ratio = {
-        ratio: props.customHeight.ratio_unit / props.customHeight.ratio_px,
-        unit: props.customHeight.height_unit,
-      };
+      console.log("BOTTOM_CUSTOMH", props.customHeight);
+
+      console.log("CURRENT_RATIO_BOTTOM", current_ratio);
 
       // Detect comment
       setComment(detectComment(props.keypoints, fullBody, current_ratio));
@@ -584,7 +595,6 @@ export default function TestModel(props) {
                 ? transparentMat
                 : materials.Ch36_Body
             }
-            // material={materials.Ch36_Body}
             skeleton={nodes.Ch36.skeleton}
           />
         </group>
