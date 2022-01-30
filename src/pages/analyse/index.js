@@ -37,6 +37,7 @@ const Analyse = () => {
             customHeight={customHeight}
             setCustomHeight={setCustomHeight}
             showModel={showModel}
+            isReset={isReset}
           />
           <PictureProcessing
             customHeight={customHeight}
