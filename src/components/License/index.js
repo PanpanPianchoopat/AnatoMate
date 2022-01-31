@@ -76,7 +76,7 @@ const License = () => {
       )}
       <p>Developed by Acarium &ensp; &#183; &ensp;</p>
       <LicenseLink onClick={() => setShowPopup(true)}>
-        License of Agreement
+        License Agreement
       </LicenseLink>
     </Footer>
   );
