@@ -259,7 +259,7 @@ function getComment(
   const headSize = fullBody * 0.125; // This full body is prefer full body from user
   const actual_fullBody = origin_fullBody * current_ratio.ratio;
   const actual_length = length * current_ratio.ratio;
-  const prefer_length = fullBody * (length / origin_fullBody);
+  const prefer_length = fullBody * (length / actual_fullBody);
   const static_suffix = {
     long: "longer",
     short: "shorter",
