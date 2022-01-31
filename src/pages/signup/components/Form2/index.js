@@ -208,8 +208,8 @@ const Form2 = () => {
         ]}
       >
         <Checkbox>
-          I agree to the <a href="">Terms of Use</a> and{" "}
-          <a href="">Privacy Policy</a>
+          I agree to the <a href="#">Terms of Use</a> and{" "}
+          <a href="#">Privacy Policy</a>
         </Checkbox>
       </Form.Item>
 
