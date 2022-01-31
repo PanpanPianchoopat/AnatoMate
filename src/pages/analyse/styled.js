@@ -24,6 +24,7 @@ export const Header = styled.h1`
   font-size: 2em;
   padding-bottom: 20px;
   cursor: pointer;
+  width: fit-content;
 `;
 export const SectionsContainer = styled.div`
   display: flex;
