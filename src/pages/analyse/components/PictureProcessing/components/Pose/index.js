@@ -9,6 +9,8 @@ import merge from "lodash.merge";
 import { message, Modal } from "antd";
 
 async function PostEstimation(image) {
+  const load = message.loading("Processing...", 0);
+  setTimeout(load, 2000);
   const model = poseDetection.SupportedModels.MoveNet;
   const detector = await poseDetection.createDetector(model);
   return await detector.estimatePoses(image);
