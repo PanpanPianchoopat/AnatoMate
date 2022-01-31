@@ -276,7 +276,7 @@ function getComment(
       prefer_length
     )} ${current_ratio.unit} (Current is ${Math.round(actual_length)} ${
       current_ratio.unit
-    })`,
+    })`, // this comment tells that current suggestion might be wrong
   };
 
   var thisSuffix = "";
