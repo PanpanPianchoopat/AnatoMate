@@ -33,9 +33,10 @@ const License = () => {
             <b>License of Agreement</b>
           </p>
           <p style={{ textAlign: "justify" }}>
-            &emsp;ซอฟต์แวร์นี้เป็นผลงานที่พัฒนาขึ้นโดย Acarium จาก
-            สถาบันเทคโนโลยีพระจอมเกล้าธนบุรี ภายใต้การดูแลของ นายนันทิพัฒน์
-            นาคทอง ภายใต้โครงการ
+            &emsp;ซอฟต์แวร์นี้เป็นผลงานที่พัฒนาขึ้นโดย นายชัชพล สุกิจพรอุดม
+            นางสาวพลอยปภัส เพียรชูพัฒน์ และ นางสาวนาราภัทร โมระกรานต์ (สมาชิกทีม
+            Acarium) จากสถาบันเทคโนโลยีพระจอมเกล้าธนบุรี ภายใต้การดูแลของ
+            นายนันทิพัฒน์ นาคทอง ภายใต้โครงการ
             เว็บไซต์วิเคราะห์ภาพวาดตามหลักกายวิภาคเพื่อเป็นแนวทางในการแก้ไขภาพวาด
             (Anatomate) ซึ่งสนับสนุนโดย
             สำนักงานพัฒนาวิทยาศาสตร์และเทคโนโลยีแห่งชาติ
@@ -51,23 +52,25 @@ const License = () => {
             รวมทั้งไม่รับรองความถูกต้องหรือประสิทธิภาพการทำงานของซอฟต์แวร์
             ตลอดจนไม่รับประกันความเสียหายต่างๆ
             อันเกิดจากการใช้ซอฟต์แวร์นี้ทั้งสิ้น <br />
-            &emsp;This software is a work developed by Acarium from King
-            Mongkut's University of Technology Thonburi under the provision of
-            Mr. Nuntipat Narkthong under Web-based application to analyze
-            drawings according to anatomy principles, which has been supported
-            by the National Science and Technology Development Agency (NSTDA) ,
-            in order to encourage pupils and students to learn and practice
-            their skills in developing software. Therefore, the intellectual
-            property of this software shall belong to the developer and the
-            developer gives NSTDA a permission to distribute this software as an
-            “as is” and non- modified software for a temporary and non-
-            exclusive use without remuneration to anyone for his or her own
-            purpose or academic purpose, which are not commercial purposes. In
-            this connection, NSTDA shall not be responsible to the user for
-            taking care, maintaining, training or developing the efficiency of
-            this software. Moreover, NSTDA shall not be liable for any error,
-            software efficiency and damages in connection with or arising out of
-            the use of the software.
+            &emsp;This software is a work developed by Mr. Chatchapon
+            Sukitporn-udom, Miss Ploypapas Pianchoopat, and Miss Narapathra
+            Morakrant (members of Acarium) from King Mongkut's University of
+            Technology Thonburi under the provision of Mr. Nuntipat Narkthong
+            under Web-based application to analyze drawings according to anatomy
+            principles (Anatomate), which has been supported by the National
+            Science and Technology Development Agency (NSTDA) , in order to
+            encourage pupils and students to learn and practice their skills in
+            developing software. Therefore, the intellectual property of this
+            software shall belong to the developer and the developer gives NSTDA
+            a permission to distribute this software as an “as is” and
+            non-modified software for a temporary and non-exclusive use without
+            remuneration to anyone for his or her own purpose or academic
+            purpose, which are not commercial purposes. In this connection,
+            NSTDA shall not be responsible to the user for taking care,
+            maintaining, training or developing the efficiency of this software.
+            Moreover, NSTDA shall not be liable for any error, software
+            efficiency and damages in connection with or arising out of the use
+            of the software.
           </p>
         </Modal>
       )}
