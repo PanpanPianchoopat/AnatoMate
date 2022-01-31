@@ -15,6 +15,7 @@
  font-family: 'Montserrat', sans-serif;
 }
 
+
 .header {
  font-size: 3em;
  color: #43065f;
@@ -34,5 +35,5 @@
   position: absolute;
   display: flex;
   justify-content: center;
-  margin-right: 25px;
+  margin-right: 5vw;
 }

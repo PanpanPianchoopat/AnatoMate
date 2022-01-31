@@ -23,6 +23,7 @@ export const Header = styled.h1`
   color: ${COLORS.DARK_PURPLE};
   font-size: 2em;
   padding-bottom: 20px;
+  cursor: pointer;
 `;
 export const SectionsContainer = styled.div`
   display: flex;

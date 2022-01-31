@@ -1,16 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   PageContainer,
   ContentWrapper,
   SectionsContainer,
   Header,
-  EmptySuggest,
 } from "./styled";
 import PictureProcessing from "./components/PictureProcessing";
 import HowTo from "./components/HowTo";
 import Suggestions from "./components/Suggestions";
 import { SectionHeader } from "./components/HowTo/styled";
 import { SuggestionsWrapper } from "./components/Suggestions/styled";
+import { useRouter } from "next/router";
 
 const Analyse = () => {
   const [showPoints, setShowPoints] = useState(false);
@@ -18,17 +18,14 @@ const Analyse = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [modelSkin, setModelSkin] = useState("transparent");
 
-  // reset image button
-  const [isResetImg, setIsResetImg] = useState(false);
+  const [isResetImg, setIsResetImg] = useState(false); // reset image button
 
-  // preferences of height
-  const [customHeight, setCustomHeight] = useState({});
+  const [customHeight, setCustomHeight] = useState({}); // preferences of height
+  const [charHeight, setCharHeight] = useState(0); // character's height
 
-  // character's height
-  const [charHeight, setCharHeight] = useState(0);
+  const [isModelReady, setIsModelReady] = useState(false); // set to true when get all keypoints from pose processing
 
-  // set to true when get all keypoints from pose processing
-  const [isModelReady, setIsModelReady] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     console.log("SUGGESTION", suggestions);
@@ -41,7 +38,7 @@ const Analyse = () => {
   return (
     <PageContainer>
       <ContentWrapper>
-        <Header>AnatoMate</Header>
+        <Header onClick={() => router.push("/")}>AnatoMate</Header>
         <SectionsContainer>
           <HowTo
             customHeight={customHeight}
