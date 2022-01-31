@@ -26,7 +26,7 @@ function FindKeypoints(
   resetImg
 ) {
   let keypoints = [];
-  let score;
+  let score = 0;
   let poseEs = {};
 
   PostEstimation(image)
