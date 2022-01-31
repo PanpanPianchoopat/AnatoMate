@@ -54,8 +54,8 @@ const License = () => {
             อันเกิดจากการใช้ซอฟต์แวร์นี้ทั้งสิ้น <br />
             &emsp;This software is a work developed by Mr. Chatchapon
             Sukitporn-udom, Miss Ploypapas Pianchoopat, and Miss Narapathra
-            Morakrant (members of Acarium) from King Mongkut's University of
-            Technology Thonburi under the provision of Mr. Nuntipat Narkthong
+            Morakrant (members of Acarium) from King Mongkut&apos;s University
+            of Technology Thonburi under the provision of Mr. Nuntipat Narkthong
             under Web-based application to analyze drawings according to anatomy
             principles (Anatomate), which has been supported by the National
             Science and Technology Development Agency (NSTDA) , in order to

@@ -7,10 +7,12 @@ import {
   Smiley,
   ButtonGroup,
   OptionButton,
+  Explanation,
 } from "./styled";
 import COLORS from "../../../../../public/constants/colors";
 import Button from "../../../../components/Button";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { SectionHeader, SectionUnderline } from "../HowTo/styled";
 
 function getTagColor(severity) {
   if (severity == 3) {
@@ -88,17 +90,20 @@ const Suggestions = ({ ...props }) => {
         Reupload Photo
       </Button>
 
-      <div style={{ display: "flex", alignItems: "center", margin: "5px 0" }}>
-        <h2 style={{ margin: "0" }}>Suggestions</h2>
-        <Tooltip title={popContent} color="#404040">
-          <AiOutlineQuestionCircle
-            style={{
-              fontSize: "1.5em",
-              marginLeft: "5px",
-              cursor: "pointer",
-            }}
-          />
-        </Tooltip>
+      <div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            margin: "10px 0",
+          }}
+        >
+          <SectionHeader style={{ margin: "0" }}>Suggestions</SectionHeader>
+          <Tooltip title={popContent} color="#404040">
+            <Explanation />
+          </Tooltip>
+        </div>
+        <SectionUnderline />
       </div>
 
       <div style={{ marginBottom: "10px" }}>
@@ -129,7 +134,7 @@ const Suggestions = ({ ...props }) => {
       {props && props.suggestions ? (
         <div
           style={{
-            height: `${showModel ? "330px" : "370px"}`,
+            height: `${showModel ? "300px" : "340px"}`,
             overflow: "auto",
             marginTop: "10px",
           }}

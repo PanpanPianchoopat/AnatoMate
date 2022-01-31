@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { AiOutlineSmile } from "react-icons/ai";
+import { AiOutlineSmile, AiOutlineQuestionCircle } from "react-icons/ai";
 import COLORS from "../../../../../public/constants/colors";
 
 export const SuggestionsWrapper = styled.div`
@@ -34,6 +34,13 @@ export const OptionButton = styled.div.attrs((props) => {
     background: black;
     color: white;
   }
+`;
+
+export const Explanation = styled(AiOutlineQuestionCircle)`
+  font-size: 1.5em;
+  margin-left: 5px;
+  cursor: pointer;
+  // align-self: center;
 `;
 
 export const Detail = styled.p`

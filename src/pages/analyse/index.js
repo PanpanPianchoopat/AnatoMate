@@ -8,7 +8,7 @@ import {
 import PictureProcessing from "./components/PictureProcessing";
 import HowTo from "./components/HowTo";
 import Suggestions from "./components/Suggestions";
-import { SectionHeader } from "./components/HowTo/styled";
+import { SectionHeader, SectionUnderline } from "./components/HowTo/styled";
 import { SuggestionsWrapper } from "./components/Suggestions/styled";
 import { useRouter } from "next/router";
 
@@ -74,7 +74,8 @@ const Analyse = () => {
           ) : (
             <SuggestionsWrapper>
               <SectionHeader>Suggestions</SectionHeader>
-              <p>Nothing to suggest. Plase upload your photo.</p>
+              <SectionUnderline />
+              <p>Nothing to suggest. Please upload your photo.</p>
             </SuggestionsWrapper>
           )}
         </SectionsContainer>

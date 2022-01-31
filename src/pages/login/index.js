@@ -30,7 +30,7 @@ const Login = () => {
       <FormContainer>
         <b>Login to your acccount</b>
         <small>
-          Don't have an account yet?{" "}
+          Don&apos;t have an account yet?{" "}
           <a href="/signup" style={{ color: COLORS.ERROR_RED }}>
             Sign up
           </a>
