@@ -16,7 +16,7 @@ function requiredField(fieldName) {
 const validateDuplicateName = (rule, value, callback) => {
   const containSpecialChar = /[!-\/:-@[-`{-~]/.test(value);
   if (containSpecialChar) {
-    callback("User name cannot contain special characters");
+    callback("Username cannot contain special characters");
   }
   userAPI.findExact("username", value).then((res) => {
     if (value != "" && res.data.length > 0) {
