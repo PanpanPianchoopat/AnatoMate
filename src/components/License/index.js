@@ -30,7 +30,7 @@ const License = () => {
           width={800}
         >
           <p>
-            <b>License of Agreement</b>
+            <b>License Agreement</b>
           </p>
           <p style={{ textAlign: "justify" }}>
             &emsp;ซอฟต์แวร์นี้เป็นผลงานที่พัฒนาขึ้นโดย นายชัชพล สุกิจพรอุดม
@@ -76,7 +76,7 @@ const License = () => {
       )}
       <p>Developed by Acarium &ensp; &#183; &ensp;</p>
       <LicenseLink onClick={() => setShowPopup(true)}>
-        License of Agreement
+        License Agreement
       </LicenseLink>
     </Footer>
   );
