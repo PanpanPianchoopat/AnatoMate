@@ -266,15 +266,15 @@ function getComment(
   };
   const length_comment = {
     same: "",
-    diff: `\n\nNOTE: Your prefer height is ${Math.round(fullBody)} ${
+    diff: `\n\WARNING: Your prefer height is ${fullBody.toFixed(2)} ${
       current_ratio.unit
-    } but the actual height from our calculation is ${Math.round(
-      actual_fullBody
+    } but the actual height from our calculation is ${actual_fullBody.toFixed(
+      2
     )} ${
       current_ratio.unit
-    }\nSo, your prefer ${part_name} length should be ${Math.round(
-      prefer_length
-    )} ${current_ratio.unit} (Current is ${Math.round(actual_length)} ${
+    }\nSo, your prefer ${part_name} length should be ${prefer_length.toFixed(
+      2
+    )} ${current_ratio.unit} (Current is ${actual_length.toFixed(2)} ${
       current_ratio.unit
     })`, // this comment tells that current suggestion might be wrong
   };
